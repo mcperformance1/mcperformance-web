@@ -3,8 +3,9 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 import { getItemBySlug } from "../../../lib/notion";
 
-export default async function ProjectDetail({ params }: { params: { slug: string } }) {
-  const project = await getItemBySlug(params.slug);
+export default async function ProjectDetail({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const project = await getItemBySlug(slug);
   
   if (!project || project.category !== "Proje") {
     return (

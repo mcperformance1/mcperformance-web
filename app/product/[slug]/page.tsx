@@ -5,9 +5,10 @@ import ProductSpecs from "../../../components/ProductSpecs";
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export default async function ProductDetail({ params }: { params: { slug: string } }) {
+export default async function ProductDetail({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const items = await fetchAllItems(); // Explicitly fetch all instead of using wrapper
-  const product = items.find((item: NotionItem) => item.slug === params.slug);
+  const product = items.find((item: NotionItem) => item.slug === slug);
   
   if (!product) {
     const availableSlugs = items.map((i: NotionItem) => i.slug).join(", ");
@@ -15,7 +16,7 @@ export default async function ProductDetail({ params }: { params: { slug: string
       <div className="min-h-screen bg-black pt-40 px-6 max-w-screen-xl mx-auto flex flex-col pb-32">
         <div className="text-center text-gray-500 font-black italic uppercase">
            <h2 className="text-4xl mb-4">Ürün Bulunamadı</h2>
-           <p className="text-xl mb-4 text-red-500">Aranan: {params.slug}</p>
+           <p className="text-xl mb-4 text-red-500">Aranan: {slug}</p>
            <p className="text-sm font-medium text-gray-400 break-words">Sistemdeki Sluglar: {availableSlugs || "Sistemde hiç ürün yok. Vercel env değişkenlerini kontrol edin."}</p>
         </div>
       </div>
