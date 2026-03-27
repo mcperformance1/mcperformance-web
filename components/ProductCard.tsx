@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useCart } from "../context/CartContext";
 
 interface ProductProps {
   data: {
@@ -14,10 +15,23 @@ interface ProductProps {
 }
 
 export default function ProductCard({ data }: ProductProps) {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    addToCart({
+      id: data.id,
+      name: data.name,
+      slug: data.slug,
+      price: data.price,
+      image: data.image
+    });
+  };
+
   return (
     <Link 
       href={`/product/${data.slug}`} 
-      className="group relative block border border-[#222222] bg-[#000000] p-5 flex flex-col overflow-hidden transition-colors hover:border-[#444444] cursor-pointer"
+      className="group relative flex flex-col border border-[#222222] bg-[#000000] p-5 overflow-hidden transition-colors hover:border-[#444444] cursor-pointer"
     >
       {/* Resim alanı (Hover zoom) */}
       <div className="relative w-full aspect-[4/5] mb-5 overflow-hidden bg-[#0A0A0A] rounded-sm">
@@ -28,26 +42,24 @@ export default function ProductCard({ data }: ProductProps) {
       </div>
 
       {/* İçerik */}
-      <div className="flex flex-col flex-1 relative z-10 pb-4">
-        <h3 className="text-lg md:text-xl font-black italic uppercase leading-tight mb-1 text-white pr-10">
+      <div className="flex flex-col flex-1 mb-6">
+        <h3 className="text-lg md:text-xl font-black italic uppercase leading-tight mb-2 text-white">
           {data.name}
         </h3>
-        <p className="text-gray-400 font-bold tracking-wider text-base mt-2">
+        <p className="text-gray-400 font-black italic tracking-wider text-base">
           {data.price}
         </p>
       </div>
 
-      {/* Sağ Alt "+" Sepet Butonu */}
-      <button 
-        className="absolute bottom-5 right-5 w-10 h-10 bg-white text-black flex items-center justify-center font-black text-2xl hover:bg-gray-300 transition-colors z-20"
-        aria-label="Sepete ekle"
-        onClick={(e) => {
-          e.preventDefault(); // Sayfa değişimini engeller, sadece sepete ekler
-          alert(`${data.name} sepete eklendi!`);
-        }}
-      >
-        +
-      </button>
+      {/* Tam Genişlikte SEPETE EKLE Butonu */}
+      <div className="mt-auto">
+        <button 
+          className="w-full bg-white text-black font-black italic uppercase text-sm md:text-base tracking-widest py-3 hover:bg-gray-300 transition-colors"
+          onClick={handleAddToCart}
+        >
+          SEPETE EKLE
+        </button>
+      </div>
     </Link>
   );
 }

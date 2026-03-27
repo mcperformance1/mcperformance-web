@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   description: "Track-Focused Premium Otomotiv Parçaları Kataloğu",
 };
 
+import { CartProvider } from "../context/CartContext";
+
 export default function RootLayout({
   children,
 }: {
@@ -22,10 +24,11 @@ export default function RootLayout({
   return (
     <html lang="tr" className={`${interFont.variable} font-sans`}>
       <body className="bg-[#000000] text-white min-h-screen flex flex-col selection:bg-white selection:text-black font-black italic">
-        <Navbar />
-        <main className="flex-1 w-full">{children}</main>
-        {/* Sadeleştirilmiş Global Footer entegrasyonu */}
-        <Footer />
+        <CartProvider>
+          <Navbar />
+          <main className="flex-1 w-full">{children}</main>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

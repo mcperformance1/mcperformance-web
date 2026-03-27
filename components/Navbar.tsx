@@ -5,11 +5,14 @@ import { ShoppingCart, Menu as MenuIcon } from "lucide-react";
 import Menu from "./Menu";
 import CartDrawer from "./CartDrawer";
 import SearchBar from "./SearchBar";
+import { useCart } from "../context/CartContext";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  
+  const { cartCount } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,8 +38,17 @@ export default function Navbar() {
           {/* Sağ: İkonlar */}
           <div className="flex items-center space-x-5 md:space-x-8">
             <SearchBar />
-            <button onClick={() => setIsCartOpen(true)} className="text-white hover:text-gray-400 transition-colors p-1">
+            <button 
+              onClick={() => setIsCartOpen(true)} 
+              className="group text-white hover:text-gray-400 transition-colors flex items-center gap-2"
+            >
               <ShoppingCart size={22} strokeWidth={2.5} />
+              <span className="font-black italic text-sm md:text-base tracking-widest hidden sm:block">
+                 SEPET ({cartCount})
+              </span>
+              <span className="font-black italic text-sm tracking-widest sm:hidden">
+                 ({cartCount})
+              </span>
             </button>
             <button onClick={() => setIsMenuOpen(true)} className="text-white hover:text-gray-400 transition-colors p-1">
               <MenuIcon size={26} strokeWidth={2.5} />
