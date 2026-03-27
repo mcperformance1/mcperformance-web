@@ -108,7 +108,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                {cart.length > 0 ? (
                  <button 
                    onClick={handleCheckout}
-                   className="w-full bg-[#25D366] text-black py-4 font-black italic uppercase text-lg hover:bg-[#20bd5a] transition-colors tracking-wide outline-none flex items-center justify-center gap-2"
+                   className="w-full bg-[#FF5722] text-white py-4 font-black italic uppercase text-lg hover:bg-white hover:text-black transition-colors tracking-wide outline-none flex items-center justify-center gap-2"
                  >
                    WHATSAPP'TAN SİPARİŞ VER
                  </button>

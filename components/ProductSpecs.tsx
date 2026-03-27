@@ -8,15 +8,15 @@ export default function ProductSpecs({ specs }: { specs: Record<string, string> 
   }
 
   return (
-    <div className="w-full mt-8 mb-8 border-t border-[#222222]">
+    <div className="w-full mt-6 mb-8 border-t border-[#333333]">
       {entries.map(([key, value]) => (
-        <div key={key} className="flex justify-between items-center py-4 border-b border-[#222222] hover:bg-[#0a0a0a] transition-colors px-2">
-          <span className="text-gray-400 font-black italic uppercase text-sm md:text-base tracking-wider">
-            {key}
-          </span>
-          <span className="text-white font-black italic uppercase text-sm md:text-base text-right max-w-[50%]">
-            {value}
-          </span>
+        <div key={key} className="flex justify-between items-start py-3 border-b border-[#333333] hover:bg-[#111111] transition-colors pr-2">
+           <span className="text-gray-500 font-medium tracking-wide text-xs uppercase pt-1">
+             {key}
+           </span>
+           <span className="text-white font-black italic uppercase text-sm text-right pl-4">
+             {value}
+           </span>
         </div>
       ))}
     </div>

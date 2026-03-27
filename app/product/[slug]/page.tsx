@@ -40,27 +40,27 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
 
            {/* Sağ Panel: Info, Specs, WhatsApp */}
            <div className="w-full lg:w-1/2 flex flex-col justify-start">
-              <span className="text-gray-500 font-black italic uppercase tracking-widest mb-4 inline-block">
+              <span className="text-gray-500 font-bold italic uppercase tracking-widest mb-4 inline-block text-sm">
                  Marka: <span className="text-white">{product.brand || "Bilinmiyor"}</span>
               </span>
               
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black italic uppercase leading-none mb-6">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-black italic uppercase leading-tight mb-2">
                 {product.name}
               </h1>
               
-              <p className="text-3xl font-black italic text-gray-300 tracking-wider">
+              <p className="text-2xl font-light italic text-gray-300 tracking-widest mb-4">
                 {product.price}
               </p>
               
               {/* Dinamik Özellikler Tablosu */}
               <ProductSpecs specs={product.specs} />
               
-              <div className="mt-auto pt-8">
+              <div className="mt-8">
                  <a 
                     href={whatsappUrl} 
                     target="_blank" 
                     rel="noreferrer" 
-                    className="block bg-[#25D366] text-black text-center font-black italic uppercase text-lg px-6 py-5 hover:bg-[#20bd5a] transition-colors w-full shadow-lg hover:shadow-xl"
+                    className="block bg-[#FF5722] text-white text-center font-black italic uppercase text-base px-6 py-4 hover:bg-white hover:text-black transition-colors w-full shadow-lg hover:shadow-xl"
                  >
                     WHATSAPP İLE BİLGİ AL
                  </a>
