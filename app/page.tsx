@@ -4,24 +4,23 @@ import { ProductCard } from "./components/ProductCard";
 const FEATURED_PRODUCTS = [
   {
     id: "an-fitting-90",
-    name: "90° CNC AN Fitting - Black",
+    name: "90° CNC AN Fitting - Siyah",
     price: 34.00,
     quantity: 1,
     image: "/images/product_fitting.png"
   },
   {
     id: "an-fitting-45",
-    name: "45° CNC AN Fitting - Slate",
+    name: "45° CNC AN Fitting - Antrasit",
     price: 32.50,
     quantity: 1,
     image: "/images/product_fitting.png"
   },
   {
     id: "an-fitting-straight",
-    name: "Straight CNC AN Fitting",
+    name: "Düz CNC AN Fitting",
     price: 28.00,
-    quantity: 1,
-    image: "/images/product_fitting.png"
+    quantity: 1,    image: "/images/product_fitting.png"
   }
 ];
 
@@ -33,33 +32,33 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-screen min-h-[600px] w-full flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-black/50 z-10" />
+          <div className="absolute inset-0 bg-black/60 z-10" />
           <img 
             src="/images/hero.png" 
-            alt="MC Performance Engine Bay" 
-            className="object-cover w-full h-full opacity-60"
+            alt="MC Performance Atölye" 
+            className="object-cover w-full h-full opacity-50"
           />
         </div>
         
         <div className="relative z-20 text-center px-4 max-w-5xl mx-auto flex flex-col items-center">
-          <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter text-white uppercase mb-6 drop-shadow-lg">
+          <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter text-white uppercase mb-6 drop-shadow-2xl">
             MC PERFORMANCE
           </h1>
           <div className="h-px w-24 bg-white/50 mb-8"></div>
           <p className="text-lg md:text-2xl text-slate-200 font-light tracking-widest uppercase">
-            Engineered for Excellence. BMW & VAG Specialists.
+            Mükemmellik İçin Tasarlandı. BMW & VAG Uzmanı.
           </p>
           <a href="#featured" className="mt-12 py-4 px-10 border border-white text-white font-medium tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-500">
-            Explore Collection
+            KOLEKSİYONU KEŞFET
           </a>
         </div>
       </section>
 
-      {/* Brand Wall Section */}
+      {/* Markalar Bölümü */}
       <section id="brands" className="py-24 border-b border-white/5 bg-zinc-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">Trusted Partners</h2>
+            <h2 className="text-sm font-semibold tracking-[0.2em] text-slate-500 uppercase">Resmi Partnerler & Markalar</h2>
           </div>
           <div className="flex flex-wrap justify-center gap-12 md:gap-24 items-center opacity-70">
             {BRANDS.map((brand) => (
@@ -71,16 +70,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Products Section */}
+      {/* Öne Çıkan Ürünler */}
       <section id="featured" className="py-32 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-16">
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-wider text-white uppercase mb-4">Featured Collection</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-wider text-white uppercase mb-4">Öne Çıkan Parçalar</h2>
               <div className="h-1 w-12 bg-white"></div>
             </div>
             <a href="#" className="hidden md:block text-sm font-medium tracking-widest text-slate-400 hover:text-white uppercase transition-colors">
-              View All Parts
+              TÜMÜNÜ GÖR
             </a>
           </div>
           
@@ -92,21 +91,21 @@ export default function Home() {
           
           <div className="mt-12 text-center md:hidden">
             <a href="#" className="text-sm font-medium tracking-widest text-slate-400 hover:text-white uppercase transition-colors">
-              View All Parts
+              TÜM PARÇALARI GÖR
             </a>
           </div>
         </div>
       </section>
 
-      {/* Projects Teaser Section */}
+      {/* Projeler Bölümü */}
       <section id="projects" className="py-32 bg-zinc-950 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold tracking-wider text-white uppercase mb-6">Our Builds</h2>
+          <h2 className="text-4xl font-bold tracking-wider text-white uppercase mb-6">PROJELERİMİZ</h2>
           <p className="text-slate-400 max-w-2xl mx-auto mb-12 text-lg">
-            Discover our portfolio of high-performance track weapons and fast-road perfection. Meticulously assembled in-house.
+            Pist canavarlarından günlük performans makinelerine kadar, atölyemizde titizlikle hazırlanan projelerimizi inceleyin.
           </p>
           <Link href="/projects" className="inline-block py-4 px-10 bg-white text-black font-semibold tracking-widest uppercase hover:bg-slate-200 transition-colors duration-300">
-            View Projects
+            PROJELERİ İNCELE
           </Link>
         </div>
       </section>
