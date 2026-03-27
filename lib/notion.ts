@@ -16,7 +16,7 @@ export interface NotionItem {
   desc: string;
   image: string;
   category: string;
-  specs: string[];
+  specs: Record<string, string>;
 }
 
 function getPropString(prop: any): string {
@@ -70,6 +70,16 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
       // Since Notion might not have category, default everything to 'Ürün' if empty
       const cat = getPropString(props['Kategori']) || "Ürün";
       
+      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori"];
+      const specs: Record<string, string> = {};
+      
+      for (const [key, prop] of Object.entries(props)) {
+        if (!reservedKeys.includes(key)) {
+           const val = getPropString(prop);
+           if (val) specs[key] = val;
+        }
+      }
+      
       return {
         id: page.id,
         name,
@@ -79,7 +89,7 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
         desc: rawDesc,
         image: getPropString(props['Image']) || getPropString(props['Görsel (URL)']) || "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?q=80&w=1080&auto=format&fit=crop",
         category: cat,
-        specs: [],
+        specs,
       };
     });
   } catch (error) {

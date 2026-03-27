@@ -1,0 +1,62 @@
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1570ms
+  Running TypeScript ...
+  Finished TypeScript in 1725ms ...
+  Collecting page data using 12 workers ...
+  Generating static pages using 12 workers (0/8) ...
+Notion fetch Error: Error: Dynamic server usage: Route / couldn't be rendered statically because it used revalidate: 0 fetch https://api.notion.com/v1/databases/29873f998f0f4076bc782c41b0941a56/query /. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at v (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:8:82459)
+    at <unknown> (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:17:13228)
+    at <unknown> (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:1:30866)
+    at <unknown> (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:1:30394) {
+  description: "Route / couldn't be rendered statically because it used revalidate: 0 fetch https://api.notion.com/v1/databases/29873f998f0f4076bc782c41b0941a56/query /. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Notion fetch Error: Error: Dynamic server usage: Route / couldn't be rendered statically because it used no-store fetch https://api.notion.com/v1/databases/29873f998f0f4076bc782c41b0941a56/query /. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at v (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:8:82459)
+    at <unknown> (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:17:16230)
+    at <unknown> (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:1:30866)
+    at <unknown> (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:1:30394) {
+  description: "Route / couldn't be rendered statically because it used no-store fetch https://api.notion.com/v1/databases/29873f998f0f4076bc782c41b0941a56/query /. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Notion fetch Error: Error: Dynamic server usage: Route /projeler couldn't be rendered statically because it used revalidate: 0 fetch https://api.notion.com/v1/databases/29873f998f0f4076bc782c41b0941a56/query /projeler. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at v (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:8:82459)
+    at <unknown> (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:17:13228)
+    at <unknown> (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:1:30866)
+    at <unknown> (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:1:30394) {
+  description: "Route /projeler couldn't be rendered statically because it used revalidate: 0 fetch https://api.notion.com/v1/databases/29873f998f0f4076bc782c41b0941a56/query /projeler. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Notion fetch Error: Error: Dynamic server usage: Route /magaza couldn't be rendered statically because it used revalidate: 0 fetch https://api.notion.com/v1/databases/29873f998f0f4076bc782c41b0941a56/query /magaza. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at v (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:8:82459)
+    at <unknown> (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:17:13228)
+    at <unknown> (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:1:30866)
+    at <unknown> (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__09z7o2x._.js:1:30394) {
+  description: "Route /magaza couldn't be rendered statically because it used revalidate: 0 fetch https://api.notion.com/v1/databases/29873f998f0f4076bc782c41b0941a56/query /magaza. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+  Generating static pages using 12 workers (2/8) 
+  Generating static pages using 12 workers (4/8) 
+  Generating static pages using 12 workers (6/8) 
+✓ Generating static pages using 12 workers (8/8) in 407ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ƒ /api/search
+├ ○ /iletisim
+├ ƒ /magaza
+├ ƒ /marka/[brand]
+├ ƒ /product/[slug]
+├ ƒ /projeler
+└ ƒ /projeler/[slug]
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
