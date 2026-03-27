@@ -2,10 +2,13 @@ import React from "react";
 import { getItemBySlug } from "../../../lib/notion";
 import ProductSpecs from "../../../components/ProductSpecs";
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function ProductDetail({ params }: { params: { slug: string } }) {
   const product = await getItemBySlug(params.slug);
   
-  if (!product || product.category !== "Ürün") {
+  if (!product) {
     return (
       <div className="min-h-screen bg-black pt-40 text-center text-gray-500 text-3xl font-black italic uppercase">
         Ürün bulunamadı veya veritabanında mevcut değil.
