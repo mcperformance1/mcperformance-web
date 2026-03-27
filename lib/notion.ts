@@ -27,6 +27,7 @@ function getPropString(prop: any): string {
   if (prop.type === "multi_select") return prop.multi_select?.map((s: any) => s.name).join(", ") || "";
   if (prop.type === "number") return prop.number?.toString() || "";
   if (prop.type === "url") return prop.url || "";
+  if (prop.type === "files") return prop.files?.[0]?.file?.url || prop.files?.[0]?.external?.url || "";
   return "";
 }
 
@@ -47,7 +48,7 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({}),
-      cache: "no-store"
+      cache: "no-store" // ensure we don't serve stale Notion data locally if dev caching triggers
     });
 
     if (!res.ok) {
@@ -59,22 +60,25 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
 
     return response.results.map((page: any) => {
       const props = page.properties;
-      const name = getPropString(props['Ad']) || "İsimsiz";
       
-      const rawPrice = getPropString(props['Fiyat']);
+      // Fallback to user's localized names if english schema fails
+      const name = getPropString(props['Name']) || getPropString(props['Ad']) || "İsimsiz";
+      const rawPrice = getPropString(props['Price']) || getPropString(props['Fiyat']);
       const formattedPrice = rawPrice ? (rawPrice.includes("₺") ? rawPrice : `₺${rawPrice}`) : "";
-
-      const rawDesc = getPropString(props['Açıklama']);
+      const rawDesc = getPropString(props['Description']) || getPropString(props['Açıklama']);
+      
+      // Since Notion might not have category, default everything to 'Ürün' if empty
+      const cat = getPropString(props['Kategori']) || "Ürün";
       
       return {
         id: page.id,
         name,
-        slug: generateSlug(name) || page.id,
+        slug: getPropString(props['Slug']) || generateSlug(name) || page.id,
         brand: getPropString(props['Marka']),
         price: formattedPrice,
         desc: rawDesc,
-        image: getPropString(props['Görsel (URL)']) || "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?q=80&w=1080&auto=format&fit=crop",
-        category: getPropString(props['Kategori']),
+        image: getPropString(props['Image']) || getPropString(props['Görsel (URL)']) || "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?q=80&w=1080&auto=format&fit=crop",
+        category: cat,
         specs: [],
       };
     });

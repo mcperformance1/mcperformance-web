@@ -8,7 +8,7 @@ export default function ClientHero() {
     <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1614200187524-dc4b892acf16?q=80&w=1920&auto=format&fit=crop')" }}
+        style={{ backgroundImage: "url('/images/hero.png')" }}
       />
       <div className="absolute inset-0 z-10 bg-[#000000]/80 mix-blend-multiply" />
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#000000] via-transparent to-[#000000]/60" />
