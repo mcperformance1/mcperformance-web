@@ -1,0 +1,19 @@
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1433ms
+  Running TypeScript ...
+  Finished TypeScript in 1561ms ...
+  Collecting page data using 12 workers ...
+  Generating static pages using 12 workers (0/6) ...
+  Generating static pages using 12 workers (1/6) 
+Error occurred prerendering page "/projeler". Read more: https://nextjs.org/docs/messages/prerender-error
+Error: Dynamic server usage: Route /projeler couldn't be rendered statically because it used revalidate: 0 fetch https://api.notion.com/v1/databases/29873f998f0f4076bc782c41b0941a56/query /projeler. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at e (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\_0vp-oad._.js:1:39932)
+    at async g (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\_0vp-oad._.js:1:40055)
+    at async e (C:\Users\safac\OneDrive\Masaüstü\yazilim\.next\server\chunks\ssr\[root-of-the-server]__0r33ip9._.js:1:2653) {
+  digest: '74721374'
+}
+Export encountered an error on /projeler/page: /projeler, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null

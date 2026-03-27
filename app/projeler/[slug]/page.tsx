@@ -1,4 +1,6 @@
 import React from "react";
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 import { getItemBySlug } from "../../../lib/notion";
 
 export default async function ProjectDetail({ params }: { params: { slug: string } }) {
