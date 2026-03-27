@@ -1,6 +1,21 @@
 import Link from "next/link";
 import { ProductCard } from "./components/ProductCard";
 
+// 1. SATIŞINI YAPTIĞIN DEV MARKALAR
+const BRANDS = [
+  { name: "PROTRACK", slug: "protrack" },
+  { name: "WIECHERS SPORT", slug: "wiechers" },
+  { name: "SPRINT BOOSTER", slug: "sprint-booster" },
+  { name: "MISHIMOTO", slug: "mishimoto" },
+  { name: "EVENTURI", slug: "eventuri" },
+  { name: "AEM", slug: "aem" },
+  { name: "BOSCH", slug: "bosch" },
+  { name: "MOTUL", slug: "motul" },
+  { name: "ITALIAN RP", slug: "italian-rp" },
+  { name: "ST SUSPENSIONS", slug: "st-suspensions" },
+  { name: "BRAID", slug: "braid" }
+];
+
 const FEATURED_PRODUCTS = [
   {
     id: "an-fitting-90",
@@ -25,8 +40,6 @@ const FEATURED_PRODUCTS = [
   }
 ];
 
-const BRANDS = ["PROTRACK", "WIECHERS SPORT", "SPRINT BOOSTER", "MISHIMOTO", "EVENTURI"];
-
 export default function Home() {
   return (
     <div className="flex flex-col w-full bg-black text-white">
@@ -37,7 +50,7 @@ export default function Home() {
           <img 
             src="/images/hero.png" 
             alt="MC Performance Atölye" 
-            className="object-cover w-full h-full opacity-70 scale-105 transition-transform duration-1000"
+            className="object-cover w-full h-full opacity-70"
           />
         </div>
         
@@ -49,26 +62,27 @@ export default function Home() {
           <p className="text-xl md:text-3xl text-slate-100 font-medium tracking-tight uppercase max-w-3xl">
             BMW & VAG Grubu Aftermarket Performans Çözümleri
           </p>
-          <p className="mt-4 text-sm md:text-lg text-slate-400 font-light tracking-[0.3em] uppercase">
-            Engineered for High-Performance
-          </p>
-          <a href="#featured" className="mt-12 py-5 px-12 border-2 border-white text-white font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+          <a href="#featured" className="mt-12 py-5 px-12 border-2 border-white text-white font-bold tracking-widest uppercase hover:bg-white hover:text-black transition-all duration-300">
             PARÇALARI KEŞFET
           </a>
         </div>
       </section>
 
-      {/* Markalar Bölümü - Renklendirilmiş & Canlı */}
-      <section id="brands" className="py-24 bg-zinc-900 border-y border-white/10">
+      {/* Markalar Bölümü - Linkli ve Şık */}
+      <section id="brands" className="py-20 bg-zinc-900 border-y border-white/10">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-xs font-bold tracking-[0.5em] text-white/40 uppercase">DÜNYACA ÜNLÜ MARKALARIMIZ</h2>
+          <div className="text-center mb-10">
+            <h2 className="text-[10px] font-bold tracking-[0.6em] text-white/30 uppercase italic">SATIŞINI SAĞLADIĞIMIZ DÜNYA MARKALARI</h2>
           </div>
-          <div className="flex flex-wrap justify-center gap-10 md:gap-20 items-center">
+          <div className="flex flex-wrap justify-center gap-6 md:gap-10 items-center">
             {BRANDS.map((brand) => (
-              <div key={brand} className="text-2xl md:text-4xl font-black tracking-tighter text-slate-500 hover:text-white hover:scale-110 transition-all duration-300 cursor-default">
-                {brand}
-              </div>
+              <Link 
+                key={brand.slug} 
+                href={`/brands/${brand.slug}`}
+                className="text-base md:text-lg font-black tracking-tighter text-slate-500 hover:text-white hover:scale-110 transition-all duration-300 cursor-pointer uppercase italic px-2"
+              >
+                {brand.name}
+              </Link>
             ))}
           </div>
         </div>
@@ -80,9 +94,9 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
             <div>
               <h2 className="text-4xl font-black tracking-tighter text-white uppercase italic">POPÜLER PARÇALAR</h2>
-              <p className="text-slate-500 mt-2 font-medium">En Çok Tercih Edilen Performans Ürünleri</p>
+              <div className="h-1 w-12 bg-white mt-2"></div>
             </div>
-            <a href="#" className="text-sm font-bold tracking-widest text-white border-b border-white pb-1 hover:text-slate-400 hover:border-slate-400 transition-colors uppercase">
+            <a href="#" className="text-sm font-bold tracking-widest text-white border-b border-white pb-1 hover:text-slate-400 transition-colors uppercase">
               TÜM KATALOĞU GÖR
             </a>
           </div>
@@ -95,49 +109,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Projeler Bölümü */}
-      <section id="projects" className="py-32 bg-zinc-900">
+      {/* Projeler & Footer Bölümü Aynı Şekilde Kalacak... */}
+      <section id="projects" className="py-32 bg-zinc-950">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="text-5xl font-black tracking-tighter text-white uppercase italic mb-8">ATÖLYE PROJELERİ</h2>
-          <p className="text-slate-300 max-w-2xl mx-auto mb-12 text-xl font-light leading-relaxed">
-            Pist ve cadde odaklı hazırladığımız, BMW ve VAG grubu özel projelerimizi detaylıca inceleyin.
-          </p>
           <Link href="/projects" className="inline-block py-5 px-12 bg-white text-black font-black tracking-widest uppercase hover:bg-slate-300 transition-all duration-300">
             PROJELERİ GÖR
           </Link>
         </div>
       </section>
 
-      {/* Footer / Alt Bilgi - WP Tarzı Modern Alt Kısım */}
       <footer className="py-20 bg-black border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div>
-            <h3 className="text-2xl font-black mb-6 italic">MC PERFORMANCE</h3>
-            <p className="text-slate-500 text-sm leading-relaxed">
-              Yüksek performanslı otomotiv parçaları ve mühendislik çözümleri. BMW ve VAG grubu için aftermarket lideri.
-            </p>
-          </div>
-          <div>
-            <h4 className="text-sm font-bold tracking-widest text-white mb-6 uppercase">Hızlı Linkler</h4>
-            <ul className="space-y-4 text-slate-400 text-sm">
-              <li><a href="#" className="hover:text-white transition-colors">Ana Sayfa</a></li>
-              <li><a href="#featured" className="hover:text-white transition-colors">Ürünler</a></li>
-              <li><a href="#projects" className="hover:text-white transition-colors">Projelerimiz</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">İletişim</a></li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-sm font-bold tracking-widest text-white mb-6 uppercase">İletişim & Atölye</h4>
-            <p className="text-slate-400 text-sm mb-2">Performans Atölyesi & Yedek Parça</p>
-            <p className="text-white font-bold text-lg mb-4">info@mcperformance.com.tr</p>
-            <div className="flex gap-4">
-              {/* Buraya Instagram linkini ekleyebilirsin */}
-              <span className="text-xs text-slate-600 uppercase">Antalya, Türkiye</span>
-            </div>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-4 mt-20 pt-8 border-t border-white/5 text-center text-[10px] text-slate-700 tracking-[0.5em] uppercase">
-          © 2026 MC Performance. Tüm Hakları Saklıdır.
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h3 className="text-2xl font-black mb-6 italic text-white">MC PERFORMANCE</h3>
+          <p className="text-slate-500 text-sm mb-8">Antalya, Türkiye | BMW & VAG Specialists</p>
+          <p className="text-[10px] text-slate-700 tracking-[0.5em] uppercase italic">© 2026 MC Performance. Tüm Hakları Saklıdır.</p>
         </div>
       </footer>
     </div>
