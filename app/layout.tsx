@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr" className={`${interFont.variable} font-sans`}>
-      <body className="bg-[#000000] text-white min-h-screen flex flex-col selection:bg-white selection:text-black">
+      <body className="bg-[#000000] text-white min-h-screen flex flex-col selection:bg-white selection:text-black font-black italic">
         <Navbar />
         <main className="flex-1 w-full">{children}</main>
         {/* Sadeleştirilmiş Global Footer entegrasyonu */}

@@ -26,9 +26,9 @@ export default function ClientHero() {
            initial={{ opacity: 0, y: 15 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 0.4, duration: 0.8 }}
-           className="text-gray-400 font-bold italic tracking-widest text-base md:text-xl mt-4 mb-8 max-w-2xl px-4 drop-shadow-lg"
+           className="text-gray-400 font-black italic uppercase tracking-[0.2em] text-sm md:text-lg mt-4 mb-8 max-w-2xl px-4 drop-shadow-lg"
         >
-           Otomotiv Performans & Mühendislik
+           OTOMOTİV YEDEK PARÇA & PERFORMANS PARÇALARI
         </motion.p>
         
         <motion.div
@@ -38,7 +38,7 @@ export default function ClientHero() {
         >
           <Link 
             href="/magaza"
-            className="text-white border-b border-white/50 pb-1 px-2 font-light italic tracking-widest text-sm md:text-base hover:text-gray-300 hover:border-white transition-colors uppercase"
+            className="text-white border-b border-white/50 pb-1 px-2 font-black italic uppercase tracking-widest text-sm md:text-base hover:text-gray-300 hover:border-white transition-colors"
           >
             TÜM MAĞAZAYI İNCELE
           </Link>
