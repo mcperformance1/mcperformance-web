@@ -38,7 +38,9 @@ function generateSlug(text: string): string {
 }
 
 export async function fetchAllItems(): Promise<NotionItem[]> {
-  if (!databaseId || !process.env.NOTION_SECRET) return [];
+  if (!databaseId || !process.env.NOTION_SECRET) {
+     throw new Error("Vercel'de NOTION_SECRET veya NOTION_DATABASE_ID eksik! Lütfen Vercel Environment Variables ayarlarını kontrol edin.");
+  }
   try {
     const res = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
       method: "POST",
@@ -52,8 +54,8 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
     });
 
     if (!res.ok) {
-      console.error("Notion API error:", await res.text());
-      return [];
+      const errorText = await res.text();
+      throw new Error(`Notion API Bağlantı Hatası: ${errorText}. Lütfen Vercel'deki şifrenin sonuna veya başına boşluk kopyalamadığınızdan emin olun.`);
     }
 
     const response = await res.json();
@@ -92,9 +94,8 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
         specs,
       };
     });
-  } catch (error) {
-    console.error("Notion fetch Error:", error);
-    return [];
+  } catch (error: any) {
+    throw new Error(error.message || String(error));
   }
 }
 

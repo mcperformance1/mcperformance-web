@@ -1,17 +1,23 @@
 import React from "react";
-import { getItemBySlug } from "../../../lib/notion";
+import { fetchAllItems, NotionItem } from "../../../lib/notion";
 import ProductSpecs from "../../../components/ProductSpecs";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function ProductDetail({ params }: { params: { slug: string } }) {
-  const product = await getItemBySlug(params.slug);
+  const items = await fetchAllItems(); // Explicitly fetch all instead of using wrapper
+  const product = items.find((item: NotionItem) => item.slug === params.slug);
   
   if (!product) {
+    const availableSlugs = items.map((i: NotionItem) => i.slug).join(", ");
     return (
-      <div className="min-h-screen bg-black pt-40 text-center text-gray-500 text-3xl font-black italic uppercase">
-        Ürün bulunamadı veya veritabanında mevcut değil.
+      <div className="min-h-screen bg-black pt-40 px-6 max-w-screen-xl mx-auto flex flex-col pb-32">
+        <div className="text-center text-gray-500 font-black italic uppercase">
+           <h2 className="text-4xl mb-4">Ürün Bulunamadı</h2>
+           <p className="text-xl mb-4 text-red-500">Aranan: {params.slug}</p>
+           <p className="text-sm font-medium text-gray-400 break-words">Sistemdeki Sluglar: {availableSlugs || "Sistemde hiç ürün yok. Vercel env değişkenlerini kontrol edin."}</p>
+        </div>
       </div>
     );
   }
