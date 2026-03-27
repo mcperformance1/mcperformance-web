@@ -1,0 +1,41 @@
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 2 errors:
+./app/page.tsx:8:1
+Module not found: Can't resolve './ClientHero'
+  [90m 6 |[0m [90m// Animasyonlar SSR uyumlu Client wrapperlarda kalacağı için ana çerçeveyi düz react node ...[0m
+  [90m 7 |[0m [90m// Veya 'framer-motion' kullanan kısımları client-side olarak ayırabiliriz.[0m
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m [33mClientHero[0m [36mfrom[0m [32m"./ClientHero"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m [36mimport[0m [33mClientMarquee[0m [36mfrom[0m [32m"./ClientMarquee"[0m;
+  [90m10 |[0m
+  [90m11 |[0m [36mexport[0m [36mdefault[0m [36masync[0m [36mfunction[0m [33mHome[0m() {
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./app/page.tsx:9:1
+Module not found: Can't resolve './ClientMarquee'
+  [90m 7 |[0m [90m// Veya 'framer-motion' kullanan kısımları client-side olarak ayırabiliriz.[0m
+  [90m 8 |[0m [36mimport[0m [33mClientHero[0m [36mfrom[0m [32m"./ClientHero"[0m;
+[31m[1m>[0m [90m 9 |[0m [36mimport[0m [33mClientMarquee[0m [36mfrom[0m [32m"./ClientMarquee"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m10 |[0m
+  [90m11 |[0m [36mexport[0m [36mdefault[0m [36masync[0m [36mfunction[0m [33mHome[0m() {
+  [90m12 |[0m   [36mconst[0m products = [36mawait[0m getAllProducts();
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./app/page.tsx:8:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./app/page.tsx:9:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)

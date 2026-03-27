@@ -1,0 +1,19 @@
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.2s
+  Running TypeScript ...
+Failed to type check.
+
+./Untitled-1.ts:7:43
+Type error: Property 'query' does not exist on type '{ retrieve: (args: WithAuth<GetDatabasePathParameters>) => Promise<GetDatabaseResponse>; create: (args: WithAuth<CreateDatabaseBodyParameters>) => Promise<...>; update: (args: WithAuth<...>) => Promise<...>; }'.
+
+  [90m 5 |[0m
+  [90m 6 |[0m [36mexport[0m [36masync[0m [36mfunction[0m getProducts() {
+[31m[1m>[0m [90m 7 |[0m   [36mconst[0m response = [36mawait[0m notion.databases.query({
+  [90m   |[0m                                           [31m[1m^[0m
+  [90m 8 |[0m     database_id: databaseId,
+  [90m 9 |[0m     filter: {
+  [90m10 |[0m       property: [32m"Status"[0m,
+Next.js build worker exited with code: 1 and signal: null

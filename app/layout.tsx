@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import "./globals.css";
-
-import { CartProvider } from "./components/CartProvider";
-import { Navbar } from "./components/Navbar";
-import { CartDrawer } from "./components/CartDrawer";
-import { Footer } from "./components/Footer";
 
 const interFont = Inter({
   variable: "--font-inter",
@@ -13,29 +10,22 @@ const interFont = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "MC Performance | Engineered for Excellence",
-  description: "Premium automotive parts, CNC-machined AN Fittings, and high-performance VAG & BMW specialists.",
+  title: "MC Performance | Otomotiv Performans & Mühendislik",
+  description: "Track-Focused Premium Otomotiv Parçaları Kataloğu",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html
-      lang="en"
-      className={`${interFont.variable} font-sans h-full antialiased dark`}
-    >
-      <body className="min-h-full flex flex-col bg-black text-white selection:bg-white selection:text-black">
-        <CartProvider>
-          <Navbar />
-          <CartDrawer />
-          <main className="flex-1 flex flex-col">
-            {children}
-          </main>
-          <Footer />
-        </CartProvider>
+    <html lang="tr" className={`${interFont.variable} font-sans`}>
+      <body className="bg-[#000000] text-white min-h-screen flex flex-col selection:bg-white selection:text-black">
+        <Navbar />
+        <main className="flex-1 w-full">{children}</main>
+        {/* Sadeleştirilmiş Global Footer entegrasyonu */}
+        <Footer />
       </body>
     </html>
   );
