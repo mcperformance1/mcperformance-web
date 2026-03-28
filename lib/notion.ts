@@ -40,13 +40,13 @@ function getPropFilesArray(prop: any): string[] {
 
 function generateSlug(text: string): string {
   return text.toLowerCase()
-    .replace(/[^a-z0-9ğüşıöç]+/g, '-') // Handle Turkish chars
+    .replace(/[^a-z0-9ğüşıöç]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
 
 export async function fetchAllItems(): Promise<NotionItem[]> {
   if (!databaseId || !process.env.NOTION_SECRET) {
-     throw new Error("Vercel'de NOTION_SECRET veya NOTION_DATABASE_ID eksik! Lütfen Vercel Environment Variables ayarlarını kontrol edin.");
+     throw new Error("Vercel'de NOTION_SECRET veya NOTION_DATABASE_ID eksik!");
   }
   try {
     const res = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
@@ -60,31 +60,32 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
       cache: "no-store" 
     });
 
-    if (!res.ok) {
-      const errorText = await res.text();
-      throw new Error(`Notion API Bağlantı Hatası: ${errorText}.`);
-    }
+    if (!res.ok) throw new Error("Notion API Hatası");
 
     const response = await res.json();
 
     return response.results.map((page: any) => {
       const props = page.properties;
       
-      const name = getPropString(props['Name']) || getPropString(props['Ad']) || "İsimsiz";
+      // Notion'daki Name sütununa bakıyoruz
+      const name = getPropString(props['Name']) || getPropString(props['Ad']) || "İsimsiz Ürün";
+      
       const rawPrice = getPropString(props['Price']) || getPropString(props['Fiyat']);
       const formattedPrice = rawPrice ? (rawPrice.includes("₺") ? rawPrice : `₺${rawPrice}`) : "";
+      
       const rawDesc = getPropString(props['Description']) || getPropString(props['Açıklama']);
+      const cat = getPropString(props['Kategori']) || "ürün";
       
-      const cat = getPropString(props['Kategori']) || "Ürün";
-
-      // --- BURADA Tür1 OLARAK GÜNCELLEDİM KANKA ---
-      const typeStr = getPropString(props['Tür1']) || getPropString(props['Tür']) || getPropString(props['Type']) || "";
+      // Tür1 veya Tür sütununa bakıyoruz
+      const typeStr = getPropString(props['Tür 1']) || getPropString(props['Tür1']) || getPropString(props['Tür']) || "";
       
-      const galleryProp = props['Galeri'] || props['Gallery'] || props['Dosyalar & Medya'] || props['Files & media'];
-      const imagesArray = getPropFilesArray(galleryProp);
+      // Resim çekme mantığı: Önce Image sütunu, yoksa Galeri
+      const imgFromCol = getPropString(props['Image']) || getPropString(props['Görsel (URL)']);
+      const galleryFiles = getPropFilesArray(props['Galeri'] || props['Gallery']);
       
-      // ReservedKeys listesine de Tür1 ekledim ki teknik özelliklerde (specs) kirlilik yapmasın
-      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Tür1", "Type", "Galeri", "Gallery", "Dosyalar & Medya", "Files & media"];
+      const mainImage = imgFromCol || galleryFiles[0] || "/logo.png";
+      
+      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Tür 1", "Tür1", "Type", "Galeri", "Gallery", "Dosyalar & Medya"];
       const specs: Record<string, string> = {};
       
       for (const [key, prop] of Object.entries(props)) {
@@ -101,15 +102,15 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
         brand: getPropString(props['Marka']),
         price: formattedPrice,
         desc: rawDesc,
-        image: getPropString(props['Image']) || getPropString(props['Görsel (URL)']) || "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?q=80&w=1080&auto=format&fit=crop",
-        images: imagesArray,
+        image: mainImage,
+        images: galleryFiles,
         category: cat,
         type: typeStr,
         specs,
       };
     });
   } catch (error: any) {
-    throw new Error(error.message || String(error));
+    throw new Error(error.message);
   }
 }
 
@@ -125,33 +126,11 @@ export async function getAllProjects() {
 
 export async function getItemBySlug(slug: string) {
   const items = await fetchAllItems();
-  const match = items.find(item => item.slug === slug);
-  return match || null;
-}
-
-export async function getUniqueBrands() {
-    const products = await getAllProducts();
-    const brands = products.map(p => p.brand).filter(b => b);
-    return Array.from(new Set(brands));
-}
-
-export function slugifyBrand(text: string): string {
-  return text.toLowerCase()
-    .replace(/[^a-z0-9ğüşıöç]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-export async function getProductsByBrandSlug(brandSlug: string) {
-  const products = await getAllProducts();
-  return products.filter(p => p.brand && slugifyBrand(p.brand) === brandSlug);
+  return items.find(item => item.slug === slug) || null;
 }
 
 export function normalizeType(text?: string): string {
   if (!text) return "";
-  try {
-    text = decodeURIComponent(text);
-  } catch (error) {
-    // decoding failed
-  }
+  try { text = decodeURIComponent(text); } catch (e) {}
   return text.toLowerCase().replace(/[^a-z0-9ğüşıöç]/g, '');
 }
