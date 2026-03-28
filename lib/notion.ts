@@ -48,6 +48,23 @@ function generateSlug(text: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
+// TÜRKÇE KARAKTERLERİ DÜZELTEN VE TEMİZLEYEN FONKSİYON
+export function normalizeType(text?: string): string {
+  if (!text) return "";
+  try { text = decodeURIComponent(text); } catch (e) {}
+  
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/ğ/g, 'g')
+    .replace(/ü/g, 'u')
+    .replace(/ş/g, 's')
+    .replace(/ı/g, 'i')
+    .replace(/ö/g, 'o')
+    .replace(/ç/g, 'c')
+    .replace(/[^a-z0-9]/g, ''); // Sadece harf ve rakam kalsın (Boşlukları da siler)
+}
+
 export async function fetchAllItems(): Promise<NotionItem[]> {
   try {
     const response = await notion.databases.query({
@@ -57,20 +74,15 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
     return response.results.map((page: any) => {
       const props = page.properties;
       
-      // 1. İSİM: Senin ekran görüntünde (177) sütun adı tam olarak "Name"
       const name = getPropString(props['Name']) || getPropString(props['Ad']) || "İsimsiz Ürün";
-      
-      // 2. FİYAT
       const rawPrice = getPropString(props['Price']) || getPropString(props['Fiyat']);
       const formattedPrice = rawPrice ? (rawPrice.includes("₺") ? rawPrice : `₺${rawPrice}`) : "";
       
-      // 3. KATEGORİ: (ürün mü proje mi?)
       const cat = getPropString(props['Kategori']).toLowerCase().trim();
       
-      // 4. TÜR: Mega Menü eşleşmesi için (Tür 1 sütununa bakıyoruz)
+      // Notion'da sütun adın "Tür 1" (arada boşluk var), ona göre çekiyoruz
       const typeStr = getPropString(props['Tür 1']) || getPropString(props['Tür1']) || getPropString(props['Tür']) || "";
       
-      // 5. RESİM: (Image sütunundaki dosyayı çekiyoruz)
       const galleryFiles = getPropFilesArray(props['Image'] || props['Galeri'] || props['Gallery']);
       const mainImage = galleryFiles[0] || "/logo.png";
       
@@ -106,7 +118,6 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
 
 export async function getAllProducts() {
   const items = await fetchAllItems();
-  // Kategori sütununda "ürün" yazanları filtrele
   return items.filter(item => item.category === "ürün"); 
 }
 
@@ -118,10 +129,4 @@ export async function getAllProjects() {
 export async function getItemBySlug(slug: string) {
   const items = await fetchAllItems();
   return items.find(item => item.slug === slug) || null;
-}
-
-export function normalizeType(text?: string): string {
-  if (!text) return "";
-  try { text = decodeURIComponent(text); } catch (e) {}
-  return text.toLowerCase().replace(/[^a-z0-9ğüşıöç]/g, '');
 }
