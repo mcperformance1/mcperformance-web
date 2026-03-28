@@ -2,6 +2,7 @@ import React from "react";
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 import { getItemBySlug } from "../../../lib/notion";
+import ProductSpecs from "../../../components/ProductSpecs";
 
 export default async function ProjectDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -37,12 +38,14 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
             {project.name}
           </h1>
           
-          <div className="bg-[#111111] p-6 border-l-4 border-white mb-10 mt-4">
+          <div className="bg-[#111111] p-6 border-l-4 border-white mb-8 mt-4">
             <h3 className="text-xl font-bold italic uppercase mb-2 text-white border-b border-[#333333] pb-4">AÇIKLAMA VE TEKNİK YAPILANDIRMA</h3>
             <p className="text-gray-400 font-medium leading-relaxed mt-4 whitespace-pre-wrap">
               {project.desc || "Bu proje için henüz bir açıklama girilmemiş."}
             </p>
           </div>
+
+          <ProductSpecs specs={project.specs} />
           
           <a 
              href={whatsappUrl} 
