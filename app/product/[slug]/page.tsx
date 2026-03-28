@@ -9,11 +9,15 @@ export const revalidate = 0;
 
 export default async function ProductDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  
+  // Tüm ürünleri çekiyoruz
   const items = await fetchAllItems(); 
+  
+  // URL'den gelen slug ile sistemdeki ID'li slug'ı eşleştiriyoruz
   const product = items.find((item: NotionItem) => item.slug === slug);
   
   if (!product) {
-    notFound(); // Hata mesajı yerine direkt Next.js'in 404 mekanizmasını kullanmak daha temizdir
+    notFound(); 
   }
 
   const whatsappMessage = encodeURIComponent(`Merhaba, ${product.name} ürünü hakkında stok bilgisi almak ve sipariş vermek istiyorum.`);
@@ -23,8 +27,12 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
     <div className="min-h-screen bg-black text-white pt-40 px-6 max-w-screen-xl mx-auto flex flex-col pb-32">
        
        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 xl:gap-20 mb-16 items-start">
-           {/* Galeri Bileşeni */}
-           <ProductGallery mainImage={product.image} galleryImages={product.images || []} />
+           
+           {/* Galeri Bileşeni: Ana resim ve Galeri dizisini gönderiyoruz */}
+           <ProductGallery 
+              mainImage={product.image} 
+              galleryImages={product.images || []} 
+           />
 
            {/* Sağ Panel: Info, Specs, WhatsApp */}
            <div className="w-full lg:flex-1 flex flex-col justify-start">
@@ -40,6 +48,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
                 {product.price}
               </p>
               
+              {/* Teknik Özellikler Tablosu */}
               <ProductSpecs specs={product.specs} />
               
               <div className="mt-8">
@@ -55,6 +64,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
            </div>
        </div>
 
+       {/* Alt Panel: Açıklama */}
        {product.desc && (
          <div className="w-full bg-transparent p-6 md:p-10 border border-[#222222] rounded-2xl md:mt-10">
             <h3 className="text-sm md:text-base font-black italic uppercase mb-6 text-[#FF5722] border-b border-[#333] pb-4 inline-block tracking-[0.15em]">
