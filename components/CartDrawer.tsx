@@ -2,8 +2,8 @@
 import React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ShoppingBag, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { useCart } from "../context/CartContext";
-
 interface CartDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -71,15 +71,21 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <div className="flex-1 p-6 flex flex-col gap-6 overflow-y-auto w-full">
                 {cart.map((item) => (
                   <div key={item.id} className="flex gap-4 border-b border-[#111111] pb-4">
-                     <div 
-                       className="w-20 h-20 bg-[#0a0a0a] border border-[#222] bg-cover bg-center shrink-0" 
+                     <Link 
+                       href={`/product/${item.slug}`}
+                       onClick={onClose}
+                       className="w-20 h-20 bg-[#0a0a0a] border border-[#222] bg-cover bg-center shrink-0 hover:opacity-80 transition-opacity" 
                        style={{ backgroundImage: `url(${item.image})` }} 
                      />
                      <div className="flex flex-col flex-1 justify-between py-1">
                         <div>
-                           <h4 className="text-white font-black italic uppercase text-sm leading-tight pr-4">
+                           <Link 
+                             href={`/product/${item.slug}`}
+                             onClick={onClose}
+                             className="text-white hover:text-[#FF5722] transition-colors font-black italic uppercase text-sm leading-tight pr-4 block"
+                           >
                              {item.name}
-                           </h4>
+                           </Link>
                            <div className="text-gray-400 font-black italic text-xs mt-1">
                              {item.price}
                            </div>

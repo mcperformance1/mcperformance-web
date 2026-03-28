@@ -7,4 +7,8 @@
       @apply bg-[#FFFFFF] text-[#000000];
     }
   }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply uppercase font-bold italic tracking-widest text-shadow-sm;
+  }
 }

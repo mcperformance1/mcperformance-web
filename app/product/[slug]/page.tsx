@@ -30,12 +30,32 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
     <div className="min-h-screen bg-black text-white pt-40 px-6 max-w-screen-xl mx-auto flex flex-col pb-32">
        
        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 xl:gap-20 mb-16 items-start">
-           {/* Sol Panel: Görsel */}
-           <div className="w-full lg:w-[45%] xl:w-[40%] aspect-square bg-[#0A0A0A] border border-[#222222] relative overflow-hidden rounded-2xl shadow-2xl">
-              <div 
-                 className="w-full h-full bg-cover bg-center transition-transform hover:scale-105 duration-700" 
-                 style={{ backgroundImage: `url(${product.image})` }} 
-              />
+           {/* Sol Panel: Görsel & Galeri */}
+           <div className="w-full lg:w-[45%] xl:w-[40%] flex flex-col gap-4">
+              {/* Ana Görsel */}
+              <div className="w-full aspect-square bg-[#0A0A0A] border border-[#FF5722] hover:border-transparent transition-colors duration-500 relative overflow-hidden rounded-xl shadow-2xl group">
+                 <div 
+                    className="w-full h-full bg-cover bg-center transition-transform hover:scale-105 duration-700" 
+                    style={{ backgroundImage: `url(${product.image})` }} 
+                 />
+                 {/* İnteraktif Çerçeve Hover İpuçları (Opsiyonel) */}
+                 <div className="absolute inset-0 border border-transparent group-hover:border-white/50 transition-colors duration-500 rounded-xl pointer-events-none" />
+              </div>
+
+              {/* Küçük Galeri (Mocked for Alpinestar Style) */}
+              <div className="flex gap-3 w-full overflow-x-auto pb-2 scrollbar-none">
+                 {[product.image, product.image, product.image, product.image].map((imgUrl, idx) => (
+                    <div 
+                      key={idx} 
+                      className="w-20 h-20 sm:w-24 sm:h-24 shrink-0 border border-[#222] hover:border-[#FF5722] transition-colors duration-300 rounded-lg overflow-hidden cursor-pointer opacity-70 hover:opacity-100 bg-[#0A0A0A]"
+                    >
+                      <div 
+                         className="w-full h-full bg-cover bg-center" 
+                         style={{ backgroundImage: `url(${imgUrl})` }} 
+                      />
+                    </div>
+                 ))}
+              </div>
            </div>
 
            {/* Sağ Panel: Info, Specs, WhatsApp */}
@@ -55,14 +75,14 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
               {/* Dinamik Özellikler Tablosu */}
               <ProductSpecs specs={product.specs} />
               
-              <div className="mt-6">
+              <div className="mt-8">
                  <a 
                     href={whatsappUrl} 
                     target="_blank" 
                     rel="noreferrer" 
-                    className="inline-block bg-[#FF5722] text-white text-center font-black italic uppercase text-sm md:text-base px-10 py-4 hover:bg-white hover:text-black transition-all duration-300 rounded-full shadow-[0_0_20px_rgba(255,87,34,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]"
+                    className="inline-block bg-[#FF5722] text-white text-center font-bold italic uppercase text-sm md:text-base px-10 py-4 hover:bg-white hover:text-black transition-all duration-500 rounded-full shadow-[0_0_15px_rgba(255,87,34,0.2)] hover:shadow-[0_0_25px_rgba(255,255,255,0.3)] tracking-widest"
                  >
-                    WHATSAPP İLE BİLGİ AL
+                    WHATSAPP'TAN BİLGİ ALIN
                  </a>
               </div>
            </div>

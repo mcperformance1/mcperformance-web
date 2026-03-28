@@ -7,43 +7,34 @@ export default function Iletisim() {
     <div className="min-h-screen bg-black text-white pt-32 px-6 flex flex-col items-center pb-24 selection:bg-white selection:text-black">
        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black italic uppercase mb-16 text-center drop-shadow-xl tracking-tighter">İLETİŞİM</h1>
        
-       <div className="w-full max-w-2xl border border-[#222222] bg-[#0A0A0A] p-8 md:p-12 shadow-2xl">
-          <form className="flex flex-col space-y-8">
-             <div>
-               <label className="block text-gray-500 font-bold italic mb-3 uppercase tracking-widest text-sm">İSİM SOYİSİM</label>
-               <input 
-                 type="text" 
-                 placeholder="Adınız..."
-                 className="w-full bg-[#000000] border border-[#333333] p-5 outline-none focus:border-white transition-colors text-white italic text-lg placeholder-gray-700" 
-               />
+       <div className="w-full max-w-3xl mt-12 px-4 md:px-0">
+          <div className="flex flex-col space-y-0">
+             
+             {/* E-Posta Satırı */}
+             <div className="flex flex-col md:flex-row md:items-center justify-between border-t border-b border-[#222] py-8 hover:bg-[#050505] transition-colors duration-500 px-4 md:px-8">
+                <span className="text-gray-500 font-bold italic uppercase tracking-widest text-xs md:text-sm mb-2 md:mb-0">E-POSTA</span>
+                <span className="text-lg md:text-xl font-bold italic tracking-widest text-white">mcperformance.tr@gmail.com</span>
              </div>
              
-             <div>
-               <label className="block text-gray-500 font-bold italic mb-3 uppercase tracking-widest text-sm">E-POSTA</label>
-               <input 
-                 type="email" 
-                 placeholder="ornek@mail.com"
-                 className="w-full bg-[#000000] border border-[#333333] p-5 outline-none focus:border-white transition-colors text-white italic text-lg placeholder-gray-700" 
-               />
+             {/* Telefon Satırı */}
+             <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-[#222] py-8 hover:bg-[#050505] transition-colors duration-500 px-4 md:px-8">
+                <span className="text-gray-500 font-bold italic uppercase tracking-widest text-xs md:text-sm mb-2 md:mb-0">TELEFON</span>
+                <span className="text-lg md:text-xl font-bold italic tracking-widest text-white">+90 538 484 33 61</span>
+             </div>
+
+             {/* Buton Satırı */}
+             <div className="flex justify-center pt-16">
+                <a 
+                   href="https://wa.me/905384843361" 
+                   target="_blank" 
+                   rel="noreferrer"
+                   className="bg-[#FF5722] text-white font-bold italic uppercase text-sm md:text-base px-10 py-5 hover:bg-white hover:text-black transition-all duration-500 rounded-full shadow-lg tracking-widest inline-flex items-center"
+                >
+                   WHATSAPP'TAN BİLGİ ALIN
+                </a>
              </div>
              
-             <div>
-               <label className="block text-gray-500 font-bold italic mb-3 uppercase tracking-widest text-sm">MESAJINIZ</label>
-               <textarea 
-                 rows={5} 
-                 placeholder="Aracınız ve siparişinizle ilgili detaylar..."
-                 className="w-full bg-[#000000] border border-[#333333] p-5 outline-none focus:border-white transition-colors text-white italic text-lg placeholder-gray-700 resize-none" 
-               />
-             </div>
-             
-             <button 
-               type="button"
-               onClick={() => alert("Mesajınız başarıyla iletildi. En kısa sürede dönüş sağlanacaktır.")}
-               className="bg-white text-black font-black italic uppercase text-2xl p-6 hover:bg-gray-200 transition-colors tracking-widest mt-4"
-             >
-               GÖNDER
-             </button>
-          </form>
+          </div>
        </div>
        
        <div className="mt-20 flex space-x-8 text-gray-500 font-bold italic uppercase tracking-wider">
