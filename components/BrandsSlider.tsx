@@ -2,6 +2,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+import Link from 'next/link';
+
 export default function BrandsSlider() {
   const brands = [
     "PROTRACK", "WIECHERS", "STOPTECH", "ST SUSPENSION", "TIAL", 
@@ -11,6 +13,12 @@ export default function BrandsSlider() {
 
   const paddedBrands = [...brands, ...brands, ...brands];
 
+  const createSlug = (text: string) => {
+    return text.toLowerCase()
+      .replace(/[^a-z0-9ğüşıöç]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+  };
+
   return (
     <div className="w-full bg-[#000000] py-6 overflow-hidden border-y border-[#222222] flex items-center relative z-20">
       <motion.div
@@ -19,9 +27,11 @@ export default function BrandsSlider() {
         transition={{ ease: "linear", duration: 35, repeat: Infinity }}
       >
         {paddedBrands.map((brand, i) => (
-          <span key={i} className="text-xl md:text-2xl font-black italic text-[#444444] uppercase tracking-wide hover:text-white transition-colors duration-300 cursor-default select-none">
-            {brand}
-          </span>
+          <Link key={i} href={`/marka/${createSlug(brand)}`} className="block">
+            <span className="text-xl md:text-2xl font-black italic text-[#444444] uppercase tracking-wide hover:text-white transition-colors duration-300 cursor-pointer select-none">
+              {brand}
+            </span>
+          </Link>
         ))}
       </motion.div>
     </div>

@@ -120,3 +120,14 @@ export async function getUniqueBrands() {
     const brands = products.map(p => p.brand).filter(b => b);
     return Array.from(new Set(brands));
 }
+
+export function slugifyBrand(text: string): string {
+  return text.toLowerCase()
+    .replace(/[^a-z0-9ğüşıöç]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+export async function getProductsByBrandSlug(brandSlug: string) {
+  const products = await getAllProducts();
+  return products.filter(p => p.brand && slugifyBrand(p.brand) === brandSlug);
+}
