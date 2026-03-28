@@ -12,7 +12,6 @@ export interface NotionItem {
   specs: Record<string, string>;
 }
 
-// Notion'dan gelen veriyi metne çeviren yardımcı fonksiyon
 function getPropString(prop: any): string {
   if (!prop) return "";
   if (prop.type === "title") return prop.title?.map((t: any) => t.plain_text).join("") || "";
@@ -34,13 +33,17 @@ function getPropFilesArray(prop: any): string[] {
   return prop.files.map((f: any) => f.file?.url || f.external?.url).filter(Boolean);
 }
 
-function generateSlug(text: string): string {
-  return text.toLowerCase()
+// ARTIK SLUG'LARI ID İLE BİRLEŞTİRİP BENZERSİZ YAPIYORUZ
+function generateUniqueSlug(name: string, id: string): string {
+  const baseSlug = name.toLowerCase()
     .replace(/[^a-z0-9ğüşıöç]+/g, '-')
     .replace(/^-+|-+$/g, '');
+  
+  // Notion ID'sinin son 4 hanesini alıp sona ekliyoruz
+  const shortId = id.slice(-4); 
+  return `${baseSlug}-${shortId}`;
 }
 
-// Mega Menü ve Filtreleme için normalleştirme
 export function normalizeType(text?: string): string {
   if (!text) return "";
   try { text = decodeURIComponent(text); } catch (e) {}
@@ -50,15 +53,11 @@ export function normalizeType(text?: string): string {
     .replace(/[^a-z0-9]/g, '');
 }
 
-// ANA VERİ ÇEKME FONKSİYONU (API FETCH)
 export async function fetchAllItems(): Promise<NotionItem[]> {
   const databaseId = process.env.NOTION_DATABASE_ID;
   const secret = process.env.NOTION_SECRET;
 
-  if (!databaseId || !secret) {
-    console.error("Notion ID veya Secret eksik!");
-    return [];
-  }
+  if (!databaseId || !secret) return [];
 
   try {
     const res = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
@@ -69,20 +68,17 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({}),
-      next: { revalidate: 0 } // Veriyi her seferinde taze çeker
+      next: { revalidate: 0 }
     });
 
-    if (!res.ok) {
-      const errorData = await res.text();
-      console.error("Notion API Hatası:", errorData);
-      return [];
-    }
+    if (!res.ok) return [];
 
     const data = await res.json();
 
     return data.results.map((page: any) => {
       const props = page.properties;
       const name = getPropString(props['Name']) || getPropString(props['Ad']) || "İsimsiz Ürün";
+      
       const rawPrice = getPropString(props['Price']) || getPropString(props['Fiyat']);
       const formattedPrice = rawPrice ? (rawPrice.includes("₺") ? rawPrice : `₺${rawPrice}`) : "";
       
@@ -105,7 +101,8 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
       return {
         id: page.id,
         name,
-        slug: getPropString(props['Slug']) || generateSlug(name) || page.id,
+        // BURASI ÇOK ÖNEMLİ: Eğer Notion'da manuel slug yoksa otomatik benzersiz slug oluşturur
+        slug: getPropString(props['Slug']) || generateUniqueSlug(name, page.id),
         brand: getPropString(props['Marka']),
         price: formattedPrice,
         desc: getPropString(props['Description']) || getPropString(props['Açıklama']),
@@ -117,20 +114,18 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
       };
     });
   } catch (error) {
-    console.error("Fetch Hatası:", error);
     return [];
   }
 }
 
-// YARDIMCI FONKSİYONLAR
 export async function getAllProducts() {
   const items = await fetchAllItems();
-  return items.filter(item => item.category === "ürün" || item.category === ""); 
+  return items.filter(item => item.category.includes("ürün") || item.category === ""); 
 }
 
 export async function getAllProjects() {
   const items = await fetchAllItems();
-  return items.filter(item => item.category === "proje");
+  return items.filter(item => item.category.includes("proje"));
 }
 
 export async function getItemBySlug(slug: string) {
