@@ -101,12 +101,12 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
 
 export async function getAllProducts() {
   const items = await fetchAllItems();
-  return items.filter(item => item.category === "Ürün");
+  return items.filter(item => item.category.trim().toLowerCase() === "ürün" || item.category === ""); // if empty, treat as product via standard fetch
 }
 
 export async function getAllProjects() {
   const items = await fetchAllItems();
-  return items.filter(item => item.category === "Proje");
+  return items.filter(item => item.category.trim().toLowerCase() === "proje");
 }
 
 export async function getItemBySlug(slug: string) {

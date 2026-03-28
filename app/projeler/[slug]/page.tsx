@@ -7,7 +7,7 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
   const { slug } = await params;
   const project = await getItemBySlug(slug);
   
-  if (!project || project.category !== "Proje") {
+  if (!project || project.category.trim().toLowerCase() !== "proje") {
     return (
       <div className="min-h-screen bg-black pt-40 text-center text-gray-500 text-3xl font-black italic uppercase">
         Proje bulunamadı veya veritabanında mevcut değil.
