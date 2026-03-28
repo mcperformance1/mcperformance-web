@@ -29,7 +29,11 @@ function getPropString(prop: any): string {
   if (prop.type === "multi_select") return prop.multi_select?.map((s: any) => s.name).join(", ") || "";
   if (prop.type === "number") return prop.number?.toString() || "";
   if (prop.type === "url") return prop.url || "";
-  if (prop.type === "files") return prop.files?.[0]?.file?.url || prop.files?.[0]?.external?.url || "";
+  if (prop.type === "files") {
+    const file = prop.files?.[0];
+    if (!file) return "";
+    return file.file?.url || file.external?.url || "";
+  }
   return "";
 }
 
@@ -45,47 +49,32 @@ function generateSlug(text: string): string {
 }
 
 export async function fetchAllItems(): Promise<NotionItem[]> {
-  if (!databaseId || !process.env.NOTION_SECRET) {
-     throw new Error("Vercel'de NOTION_SECRET veya NOTION_DATABASE_ID eksik!");
-  }
   try {
-    const res = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.NOTION_SECRET}`,
-        "Notion-Version": "2022-06-28",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({}),
-      cache: "no-store" 
+    const response = await notion.databases.query({
+      database_id: databaseId,
     });
-
-    if (!res.ok) throw new Error("Notion API Hatası");
-
-    const response = await res.json();
 
     return response.results.map((page: any) => {
       const props = page.properties;
       
-      // Notion'daki Name sütununa bakıyoruz
+      // 1. İSİM: Senin ekran görüntünde (177) sütun adı tam olarak "Name"
       const name = getPropString(props['Name']) || getPropString(props['Ad']) || "İsimsiz Ürün";
       
+      // 2. FİYAT
       const rawPrice = getPropString(props['Price']) || getPropString(props['Fiyat']);
       const formattedPrice = rawPrice ? (rawPrice.includes("₺") ? rawPrice : `₺${rawPrice}`) : "";
       
-      const rawDesc = getPropString(props['Description']) || getPropString(props['Açıklama']);
-      const cat = getPropString(props['Kategori']) || "ürün";
+      // 3. KATEGORİ: (ürün mü proje mi?)
+      const cat = getPropString(props['Kategori']).toLowerCase().trim();
       
-      // Tür1 veya Tür sütununa bakıyoruz
+      // 4. TÜR: Mega Menü eşleşmesi için (Tür 1 sütununa bakıyoruz)
       const typeStr = getPropString(props['Tür 1']) || getPropString(props['Tür1']) || getPropString(props['Tür']) || "";
       
-      // Resim çekme mantığı: Önce Image sütunu, yoksa Galeri
-      const imgFromCol = getPropString(props['Image']) || getPropString(props['Görsel (URL)']);
-      const galleryFiles = getPropFilesArray(props['Galeri'] || props['Gallery']);
+      // 5. RESİM: (Image sütunundaki dosyayı çekiyoruz)
+      const galleryFiles = getPropFilesArray(props['Image'] || props['Galeri'] || props['Gallery']);
+      const mainImage = galleryFiles[0] || "/logo.png";
       
-      const mainImage = imgFromCol || galleryFiles[0] || "/logo.png";
-      
-      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Tür 1", "Tür1", "Type", "Galeri", "Gallery", "Dosyalar & Medya"];
+      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Tür 1", "Tür1", "Type", "Galeri", "Gallery"];
       const specs: Record<string, string> = {};
       
       for (const [key, prop] of Object.entries(props)) {
@@ -101,7 +90,7 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
         slug: getPropString(props['Slug']) || generateSlug(name) || page.id,
         brand: getPropString(props['Marka']),
         price: formattedPrice,
-        desc: rawDesc,
+        desc: getPropString(props['Description']) || getPropString(props['Açıklama']),
         image: mainImage,
         images: galleryFiles,
         category: cat,
@@ -110,18 +99,20 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
       };
     });
   } catch (error: any) {
-    throw new Error(error.message);
+    console.error("Notion Fetch Hatası:", error);
+    return [];
   }
 }
 
 export async function getAllProducts() {
   const items = await fetchAllItems();
-  return items.filter(item => item.category.trim().toLowerCase() === "ürün" || item.category === ""); 
+  // Kategori sütununda "ürün" yazanları filtrele
+  return items.filter(item => item.category === "ürün"); 
 }
 
 export async function getAllProjects() {
   const items = await fetchAllItems();
-  return items.filter(item => item.category.trim().toLowerCase() === "proje");
+  return items.filter(item => item.category === "proje");
 }
 
 export async function getItemBySlug(slug: string) {
