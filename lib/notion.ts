@@ -1,12 +1,3 @@
-import { Client } from '@notionhq/client';
-
-if (!process.env.NOTION_SECRET || !process.env.NOTION_DATABASE_ID) {
-  console.warn("Missing NOTION_SECRET or NOTION_DATABASE_ID in .env.local");
-}
-
-export const notion = new Client({ auth: process.env.NOTION_SECRET });
-export const databaseId = process.env.NOTION_DATABASE_ID!;
-
 export interface NotionItem {
   id: string;
   name: string;
@@ -21,6 +12,7 @@ export interface NotionItem {
   specs: Record<string, string>;
 }
 
+// Notion'dan gelen veriyi metne çeviren yardımcı fonksiyon
 function getPropString(prop: any): string {
   if (!prop) return "";
   if (prop.type === "title") return prop.title?.map((t: any) => t.plain_text).join("") || "";
@@ -48,7 +40,7 @@ function generateSlug(text: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
-// KRİTİK: TÜM SİTEYİ KURTARAN NORMALİZE FONKSİYONU
+// Mega Menü ve Filtreleme için normalleştirme
 export function normalizeType(text?: string): string {
   if (!text) return "";
   try { text = decodeURIComponent(text); } catch (e) {}
@@ -58,27 +50,58 @@ export function normalizeType(text?: string): string {
     .replace(/[^a-z0-9]/g, '');
 }
 
+// ANA VERİ ÇEKME FONKSİYONU (API FETCH)
 export async function fetchAllItems(): Promise<NotionItem[]> {
+  const databaseId = process.env.NOTION_DATABASE_ID;
+  const secret = process.env.NOTION_SECRET;
+
+  if (!databaseId || !secret) {
+    console.error("Notion ID veya Secret eksik!");
+    return [];
+  }
+
   try {
-    const response = await notion.databases.query({ database_id: databaseId });
-    return response.results.map((page: any) => {
+    const res = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${secret}`,
+        "Notion-Version": "2022-06-28",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+      next: { revalidate: 0 } // Veriyi her seferinde taze çeker
+    });
+
+    if (!res.ok) {
+      const errorData = await res.text();
+      console.error("Notion API Hatası:", errorData);
+      return [];
+    }
+
+    const data = await res.json();
+
+    return data.results.map((page: any) => {
       const props = page.properties;
       const name = getPropString(props['Name']) || getPropString(props['Ad']) || "İsimsiz Ürün";
       const rawPrice = getPropString(props['Price']) || getPropString(props['Fiyat']);
       const formattedPrice = rawPrice ? (rawPrice.includes("₺") ? rawPrice : `₺${rawPrice}`) : "";
+      
       const cat = getPropString(props['Kategori']).toLowerCase().trim();
       const typeStr = getPropString(props['Tür 1']) || getPropString(props['Tür1']) || getPropString(props['Tür']) || "";
-      const galleryFiles = getPropFilesArray(props['Image'] || props['Galeri'] || props['Gallery']);
+      
+      const galleryFiles = getPropFilesArray(props['Image'] || props['Galeri'] || props['Gallery'] || props['Dosyalar & Medya']);
       const mainImage = galleryFiles[0] || "/logo.png";
       
-      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Tür 1", "Tür1", "Type", "Galeri", "Gallery"];
+      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Tür 1", "Tür1", "Type", "Galeri", "Gallery", "Dosyalar & Medya"];
       const specs: Record<string, string> = {};
+      
       for (const [key, prop] of Object.entries(props)) {
         if (!reservedKeys.includes(key)) {
            const val = getPropString(prop);
            if (val) specs[key] = val;
         }
       }
+
       return {
         id: page.id,
         name,
@@ -94,13 +117,12 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
       };
     });
   } catch (error) {
-    console.error("Notion Fetch Hatası:", error);
+    console.error("Fetch Hatası:", error);
     return [];
   }
 }
 
-// --- VERCEL HATASINI ÇÖZEN VE EKSİK OLAN FONKSİYONLAR ---
-
+// YARDIMCI FONKSİYONLAR
 export async function getAllProducts() {
   const items = await fetchAllItems();
   return items.filter(item => item.category === "ürün" || item.category === ""); 
@@ -123,7 +145,7 @@ export async function getUniqueBrands() {
 }
 
 export function slugifyBrand(text: string): string {
-  return text.toLowerCase()
+  return text.toLowerCase().trim()
     .replace(/[^a-z0-9ğüşıöç]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
