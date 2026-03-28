@@ -2,14 +2,14 @@ import React from "react";
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 import ProductCard from "../../components/ProductCard";
-import { getAllProducts } from "../../lib/notion";
+import { getAllProducts, normalizeType } from "../../lib/notion";
 
 export default async function Magaza({ searchParams }: { searchParams: Promise<{ q?: string; tur?: string }> }) {
   const { q, tur } = await searchParams;
   const products = await getAllProducts();
   
   const query = q?.toLowerCase();
-  const rawTur = tur?.toLowerCase();
+  const rawTur = normalizeType(tur);
   
   let displayedProducts = products;
 
@@ -21,7 +21,7 @@ export default async function Magaza({ searchParams }: { searchParams: Promise<{
 
   if (rawTur) {
     // Sadece "Tür" (Type) eşleşen ürünleri göster
-    displayedProducts = displayedProducts.filter(p => p.type?.toLowerCase() === rawTur);
+    displayedProducts = displayedProducts.filter(p => normalizeType(p.type) === rawTur);
   }
 
   const pageTitle = tur ? `${tur} ÜRÜNLERİ` : "TÜM ÜRÜNLER";

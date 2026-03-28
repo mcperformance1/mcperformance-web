@@ -134,3 +134,13 @@ export async function getProductsByBrandSlug(brandSlug: string) {
   const products = await getAllProducts();
   return products.filter(p => p.brand && slugifyBrand(p.brand) === brandSlug);
 }
+
+export function normalizeType(text?: string): string {
+  if (!text) return "";
+  try {
+    text = decodeURIComponent(text);
+  } catch (error) {
+    //
+  }
+  return text.trim().toLowerCase();
+}
