@@ -9,6 +9,7 @@ import { getAllProducts, getUniqueBrands } from "../lib/notion";
 // Veya 'framer-motion' kullanan kısımları client-side olarak ayırabiliriz.
 import ClientHero from "../components/ClientHero";
 import BrandsSlider from "../components/BrandsSlider";
+import CategoryGrid from "../components/CategoryGrid";
 
 export default async function Home() {
   const products = await getAllProducts();
@@ -22,6 +23,9 @@ export default async function Home() {
 
       {/* INFINITE MARQUEE (MARKALAR) - Client Component */}
       <BrandsSlider />
+
+      {/* ANA KATEGORİ VİTRİNİ */}
+      <CategoryGrid />
 
       {/* ÖNE ÇIKAN ÜRÜNLER (VİTRİN) - Server Rendered */}
       <section className="max-w-screen-2xl mx-auto px-6 md:px-12 py-32 w-full relative z-20">
