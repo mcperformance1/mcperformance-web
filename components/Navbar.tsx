@@ -26,47 +26,59 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 w-full z-40 transition-all duration-300 ${
-          isScrolled ? "bg-black/95 border-b border-[#111111] py-3" : "bg-transparent py-5"
+        className={`fixed top-0 w-full z-40 transition-all duration-500 ${
+          isScrolled ? "bg-black/98 border-b border-white/5 py-2 shadow-[0_10px_40px_rgba(0,0,0,0.7)]" : "bg-transparent py-5"
         }`}
       >
-        <div className="max-w-screen-2xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          <div className="flex items-center space-x-8 xl:space-x-12">
-            {/* Sol: Logo */}
-            <Link href="/" className="text-xl md:text-2xl font-black italic tracking-tight uppercase text-white drop-shadow-md hover:text-gray-300 transition-colors">
+        <div className="max-w-screen-2xl mx-auto px-6 md:px-10 flex items-center relative h-12">
+          
+          {/* SOL: LOGO (AGRESİF VE SERT) */}
+          <div className="flex-shrink-0 z-50">
+            <Link href="/" className="text-lg md:text-xl font-black italic tracking-tighter uppercase text-white hover:text-[#FF5722] transition-all duration-300">
               MC PERFORMANCE
             </Link>
-            
-            {/* Merkez: Mega Menu (Masaüstü için) */}
+          </div>
+          
+          {/* MERKEZ: MEGA MENU (DÜNYANIN MERKEZİ GİBİ TAM ORTADA) */}
+          {/* Bu div 'absolute' ve 'left-1/2' ile her zaman tam merkezde kalır */}
+          <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center justify-center w-full max-w-max px-4">
             <MegaMenu />
           </div>
           
-          {/* Sağ: İkonlar */}
-          <div className="flex items-center space-x-5 md:space-x-8">
-            <SearchBar />
+          {/* SAĞ: İKONLAR (HIZLI ERİŞİM) */}
+          <div className="ml-auto flex items-center space-x-4 md:space-x-7 z-50">
+            {/* Arama Butonu - Slim versiyon */}
+            <div className="hidden md:block scale-90">
+              <SearchBar />
+            </div>
+
+            {/* Sepet - Agresif Font */}
             <button 
               onClick={() => setIsCartOpen(true)} 
-              className="group text-white hover:text-gray-400 transition-colors flex items-center gap-2"
+              className="group text-white hover:text-[#FF5722] transition-all flex items-center gap-2"
             >
-              <ShoppingCart size={22} strokeWidth={2.5} />
-              <span className="font-black italic text-sm md:text-base tracking-widest hidden sm:block">
-                 SEPET ({cartCount})
-              </span>
-              <span className="font-black italic text-sm tracking-widest sm:hidden">
-                 ({cartCount})
+              <div className="relative">
+                <ShoppingCart size={20} strokeWidth={2.5} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-[#FF5722] text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center italic">
+                    {cartCount}
+                  </span>
+                )}
+              </div>
+              <span className="font-black italic text-[11px] tracking-[0.15em] uppercase hidden xl:block">
+                 SEPET
               </span>
             </button>
-            <button onClick={() => setIsMenuOpen(true)} className="text-white hover:text-gray-400 transition-colors p-1">
-              <MenuIcon size={26} strokeWidth={2.5} />
+
+            {/* Hamburger - Agresif */}
+            <button onClick={() => setIsMenuOpen(true)} className="text-white hover:text-[#FF5722] transition-all">
+              <MenuIcon size={24} strokeWidth={2.5} />
             </button>
           </div>
         </div>
       </header>
 
-      {/* Hamburger Menu Drawer */}
       <Menu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
-      
-      {/* Sepet Drawer */}
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );

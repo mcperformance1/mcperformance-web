@@ -29,28 +29,22 @@ function getPropString(prop: any): string {
 }
 
 function getPropFilesArray(prop: any): string[] {
-  if (!prop || prop.type !== "files" || !prop.files) return [];
-  return prop.files.map((f: any) => f.file?.url || f.external?.url).filter(Boolean);
+  if (!prop) return [];
+  if (prop.type === "files" && prop.files) {
+    return prop.files.map((f: any) => f.file?.url || f.external?.url).filter(Boolean);
+  }
+  if (prop.type === "url" && prop.url) return [prop.url];
+  return [];
 }
 
-// TÜRKÇE KARAKTERLERİ İNGİLİZCEYE ÇEVİREN VE SLUG OLUŞTURAN FONKSİYON
 function generateUniqueSlug(name: string, id: string): string {
   const trMap: { [key: string]: string } = {
     'ğ': 'g', 'ü': 'u', 'ş': 's', 'ı': 'i', 'ö': 'o', 'ç': 'c',
     'Ğ': 'g', 'Ü': 'u', 'Ş': 's', 'İ': 'i', 'Ö': 'o', 'Ç': 'c'
   };
-
   let cleanName = name;
-  Object.keys(trMap).forEach(key => {
-    cleanName = cleanName.replaceAll(key, trMap[key]);
-  });
-
-  const baseSlug = cleanName
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-  
+  Object.keys(trMap).forEach(key => { cleanName = cleanName.replaceAll(key, trMap[key]); });
+  const baseSlug = cleanName.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
   const shortId = id.slice(-4); 
   return `${baseSlug}-${shortId}`;
 }
@@ -58,23 +52,15 @@ function generateUniqueSlug(name: string, id: string): string {
 export function normalizeType(text?: string): string {
   if (!text) return "";
   try { text = decodeURIComponent(text); } catch (e) {}
-  
-  const trMap: { [key: string]: string } = {
-    'ğ': 'g', 'ü': 'u', 'ş': 's', 'ı': 'i', 'ö': 'o', 'ç': 'c'
-  };
-
+  const trMap: { [key: string]: string } = { 'ğ': 'g', 'ü': 'u', 'ş': 's', 'ı': 'i', 'ö': 'o', 'ç': 'c' };
   let cleanText = text.toLowerCase().trim();
-  Object.keys(trMap).forEach(key => {
-    cleanText = cleanText.replaceAll(key, trMap[key]);
-  });
-
+  Object.keys(trMap).forEach(key => { cleanText = cleanText.replaceAll(key, trMap[key]); });
   return cleanText.replace(/[^a-z0-9]/g, '');
 }
 
 export async function fetchAllItems(): Promise<NotionItem[]> {
   const databaseId = process.env.NOTION_DATABASE_ID;
   const secret = process.env.NOTION_SECRET;
-
   if (!databaseId || !secret) return [];
 
   try {
@@ -90,23 +76,32 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
     });
 
     if (!res.ok) return [];
-
     const data = await res.json();
 
     return data.results.map((page: any) => {
       const props = page.properties;
       const name = getPropString(props['Name']) || getPropString(props['Ad']) || "İsimsiz Ürün";
       
+      // 1. ANA RESİM (Notion 'Image' Dosya Sütunu)
+      const mainImage = getPropString(props['Image']) || getPropString(props['Görsel (URL)']) || "/logo.png";
+      
+      // 2. GALERİ (Notion 'galleryImages' Metin/Text Sütunu)
+      const galleryText = getPropString(props['galleryImages']);
+      const galleryUrls = galleryText 
+        ? galleryText.split(/[\n,]+/).map(url => url.trim()).filter(url => url.startsWith('http'))
+        : [];
+      
+      // Logo ve image_6 gibi dosyaları diziden %100 ayıklıyoruz
+      const filteredGallery = galleryUrls.filter(img => 
+        img && !img.toLowerCase().includes('logo.png') && !img.toLowerCase().includes('image_6.png')
+      );
+      
       const rawPrice = getPropString(props['Price']) || getPropString(props['Fiyat']);
       const formattedPrice = rawPrice ? (rawPrice.includes("₺") ? rawPrice : `₺${rawPrice}`) : "";
-      
       const cat = getPropString(props['Kategori']).toLowerCase().trim();
       const typeStr = getPropString(props['Tür 1']) || getPropString(props['Tür1']) || getPropString(props['Tür']) || "";
       
-      const galleryFiles = getPropFilesArray(props['Image'] || props['Galeri'] || props['Gallery'] || props['Dosyalar & Medya']);
-      const mainImage = galleryFiles[0] || "/logo.png";
-      
-      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Tür 1", "Tür1", "Type", "Galeri", "Gallery", "Dosyalar & Medya"];
+      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Tür 1", "Tür1", "Type", "Galeri", "Gallery", "Dosyalar & Medya", "galleryImages"];
       const specs: Record<string, string> = {};
       
       for (const [key, prop] of Object.entries(props)) {
@@ -119,13 +114,12 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
       return {
         id: page.id,
         name,
-        // Notion'daki slug'ı iptal ettik, her zaman benzersiz ve temiz slug oluşturuyoruz
         slug: generateUniqueSlug(name, page.id),
         brand: getPropString(props['Marka']),
         price: formattedPrice,
         desc: getPropString(props['Description']) || getPropString(props['Açıklama']),
         image: mainImage,
-        images: galleryFiles,
+        images: filteredGallery, 
         category: cat,
         type: typeStr,
         specs,
@@ -148,7 +142,6 @@ export async function getAllProjects() {
 
 export async function getItemBySlug(slug: string) {
   const items = await fetchAllItems();
-  // URL'den gelen slug'ı da normalize edip öyle arıyoruz (Büyük/Küçük/Türkçe harf hatasını bitirir)
   const cleanSearchSlug = decodeURIComponent(slug).toLowerCase();
   return items.find(item => item.slug === cleanSearchSlug) || null;
 }
@@ -160,9 +153,7 @@ export async function getUniqueBrands() {
 }
 
 export function slugifyBrand(text: string): string {
-  return text.toLowerCase().trim()
-    .replace(/[^a-z0-9ğüşıöç]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+  return text.toLowerCase().trim().replace(/[^a-z0-9ğüşıöç]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
 export async function getProductsByBrandSlug(brandSlug: string) {
