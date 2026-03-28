@@ -33,10 +33,22 @@ function getPropFilesArray(prop: any): string[] {
   return prop.files.map((f: any) => f.file?.url || f.external?.url).filter(Boolean);
 }
 
-// BENZERSİZ SLUG OLUŞTURUCU
+// TÜRKÇE KARAKTERLERİ İNGİLİZCEYE ÇEVİREN VE SLUG OLUŞTURAN FONKSİYON
 function generateUniqueSlug(name: string, id: string): string {
-  const baseSlug = name.toLowerCase()
-    .replace(/[^a-z0-9ğüşıöç]+/g, '-')
+  const trMap: { [key: string]: string } = {
+    'ğ': 'g', 'ü': 'u', 'ş': 's', 'ı': 'i', 'ö': 'o', 'ç': 'c',
+    'Ğ': 'g', 'Ü': 'u', 'Ş': 's', 'İ': 'i', 'Ö': 'o', 'Ç': 'c'
+  };
+
+  let cleanName = name;
+  Object.keys(trMap).forEach(key => {
+    cleanName = cleanName.replaceAll(key, trMap[key]);
+  });
+
+  const baseSlug = cleanName
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
   
   const shortId = id.slice(-4); 
@@ -46,10 +58,17 @@ function generateUniqueSlug(name: string, id: string): string {
 export function normalizeType(text?: string): string {
   if (!text) return "";
   try { text = decodeURIComponent(text); } catch (e) {}
-  return text.toLowerCase().trim()
-    .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
-    .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
-    .replace(/[^a-z0-9]/g, '');
+  
+  const trMap: { [key: string]: string } = {
+    'ğ': 'g', 'ü': 'u', 'ş': 's', 'ı': 'i', 'ö': 'o', 'ç': 'c'
+  };
+
+  let cleanText = text.toLowerCase().trim();
+  Object.keys(trMap).forEach(key => {
+    cleanText = cleanText.replaceAll(key, trMap[key]);
+  });
+
+  return cleanText.replace(/[^a-z0-9]/g, '');
 }
 
 export async function fetchAllItems(): Promise<NotionItem[]> {
@@ -100,7 +119,7 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
       return {
         id: page.id,
         name,
-        // KRİTİK DEĞİŞİKLİK: Notion'daki Slug sütununu pas geçip zorla Unique yapıyoruz
+        // Notion'daki slug'ı iptal ettik, her zaman benzersiz ve temiz slug oluşturuyoruz
         slug: generateUniqueSlug(name, page.id),
         brand: getPropString(props['Marka']),
         price: formattedPrice,
@@ -129,7 +148,9 @@ export async function getAllProjects() {
 
 export async function getItemBySlug(slug: string) {
   const items = await fetchAllItems();
-  return items.find(item => item.slug === slug) || null;
+  // URL'den gelen slug'ı da normalize edip öyle arıyoruz (Büyük/Küçük/Türkçe harf hatasını bitirir)
+  const cleanSearchSlug = decodeURIComponent(slug).toLowerCase();
+  return items.find(item => item.slug === cleanSearchSlug) || null;
 }
 
 export async function getUniqueBrands() {
