@@ -17,16 +17,16 @@ export default async function CategoryGrid() {
       <div className="w-full max-w-screen-2xl mx-auto px-4 lg:px-8 py-8 lg:py-12 relative z-20">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4">
           {categories.map((cat, idx) => {
-            // İlgili kategoriye ait ilk ürünü bularak Notion'dan dinamik görsel çekiyoruz
+            // İlgili tür'e (type) ait ilk ürünü bularak Notion'dan dinamik görsel çekiyoruz
             const match = products.find(
-              (p) => p.category.trim().toLowerCase() === cat.title.toLowerCase() && p.image
+              (p) => p.type?.trim().toLowerCase() === cat.title.toLowerCase() && p.image
             );
             const bgImage = match?.image || null;
 
             return (
               <Link 
                 key={idx} 
-                href={`/magaza?kategori=${encodeURIComponent(cat.queryParam)}`}
+                href={`/magaza?tur=${encodeURIComponent(cat.queryParam)}`}
                 className="group relative block w-full aspect-[4/3] lg:aspect-[16/9] overflow-hidden rounded-md shadow-lg"
               >
                 {/* Arka Plan (Görsel varsa Görsel, yoksa Şık Koyu Gradient) */}
