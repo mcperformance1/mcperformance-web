@@ -33,13 +33,12 @@ function getPropFilesArray(prop: any): string[] {
   return prop.files.map((f: any) => f.file?.url || f.external?.url).filter(Boolean);
 }
 
-// ARTIK SLUG'LARI ID İLE BİRLEŞTİRİP BENZERSİZ YAPIYORUZ
+// BENZERSİZ SLUG OLUŞTURUCU
 function generateUniqueSlug(name: string, id: string): string {
   const baseSlug = name.toLowerCase()
     .replace(/[^a-z0-9ğüşıöç]+/g, '-')
     .replace(/^-+|-+$/g, '');
   
-  // Notion ID'sinin son 4 hanesini alıp sona ekliyoruz
   const shortId = id.slice(-4); 
   return `${baseSlug}-${shortId}`;
 }
@@ -101,8 +100,8 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
       return {
         id: page.id,
         name,
-        // BURASI ÇOK ÖNEMLİ: Eğer Notion'da manuel slug yoksa otomatik benzersiz slug oluşturur
-        slug: getPropString(props['Slug']) || generateUniqueSlug(name, page.id),
+        // KRİTİK DEĞİŞİKLİK: Notion'daki Slug sütununu pas geçip zorla Unique yapıyoruz
+        slug: generateUniqueSlug(name, page.id),
         brand: getPropString(props['Marka']),
         price: formattedPrice,
         desc: getPropString(props['Description']) || getPropString(props['Açıklama']),
