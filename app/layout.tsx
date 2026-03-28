@@ -15,6 +15,7 @@ export const metadata: Metadata = {
 };
 
 import { CartProvider } from "../context/CartContext";
+import Notification from "../components/Notification";
 
 export default function RootLayout({
   children,
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="tr" className={`${interFont.variable} font-sans`}>
       <body className="bg-[#000000] text-white min-h-screen flex flex-col selection:bg-white selection:text-black font-black italic">
         <CartProvider>
+          <Notification />
           <Navbar />
           <main className="flex-1 w-full">{children}</main>
           <Footer />

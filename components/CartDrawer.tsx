@@ -10,7 +10,7 @@ interface CartDrawerProps {
 }
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
-  const { cart, removeFromCart } = useCart();
+  const { cart, removeFromCart, updateQuantity } = useCart();
 
   const parsePrice = (priceStr: string) => {
     const numStr = priceStr.replace(/[^0-9]/g, "");
@@ -81,15 +81,37 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                              {item.name}
                            </h4>
                            <div className="text-gray-400 font-black italic text-xs mt-1">
-                             {item.price} <span className="text-gray-600 ml-1">x {item.quantity}</span>
+                             {item.price}
                            </div>
                         </div>
-                        <button 
-                          onClick={() => removeFromCart(item.id)}
-                          className="text-red-500 hover:text-white transition-colors font-black italic text-[10px] uppercase flex items-center gap-1 mt-2 w-max"
-                        >
-                          <Trash2 size={12} /> LİSTEDEN SİL
-                        </button>
+                        
+                        <div className="flex items-center justify-between mt-3">
+                           {/* Adet Kontrolü */}
+                           <div className="flex items-center space-x-3 bg-[#111] px-2 py-1 rounded-sm border border-[#222]">
+                              <button 
+                                onClick={() => updateQuantity(item.id, -1)}
+                                className="text-gray-400 hover:text-white transition-colors px-1 font-black"
+                              >
+                                -
+                              </button>
+                              <span className="text-white font-black italic text-sm w-4 text-center">
+                                {item.quantity}
+                              </span>
+                              <button 
+                                onClick={() => updateQuantity(item.id, 1)}
+                                className="text-gray-400 hover:text-white transition-colors px-1 font-black"
+                              >
+                                +
+                              </button>
+                           </div>
+
+                           <button 
+                             onClick={() => removeFromCart(item.id)}
+                             className="text-red-500 hover:text-white transition-colors font-black italic text-[10px] uppercase flex items-center gap-1 w-max"
+                           >
+                             <Trash2 size={12} /> SİL
+                           </button>
+                        </div>
                      </div>
                   </div>
                 ))}

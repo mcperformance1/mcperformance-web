@@ -14,8 +14,11 @@ interface CartContextType {
   cart: CartItem[];
   addToCart: (item: Omit<CartItem, "quantity">) => void;
   removeFromCart: (id: string) => void;
+  updateQuantity: (id: string, amount: number) => void;
   clearCart: () => void;
   cartCount: number;
+  notification: { isVisible: boolean; message: string } | null;
+  hideNotification: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -23,6 +26,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [notification, setNotification] = useState<{ isVisible: boolean; message: string } | null>(null);
 
   // Sayfa yüklendiğinde LocalStorage'dan sepeti çek
   useEffect(() => {
@@ -44,33 +48,57 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [cart, isInitialized]);
 
+  const showNotification = (message: string) => {
+    setNotification({ isVisible: true, message });
+    // Otomatik kapanma
+    setTimeout(() => {
+      setNotification((prev) => (prev ? { ...prev, isVisible: false } : null));
+    }, 4000);
+  };
+
+  const hideNotification = () => {
+    setNotification((prev) => (prev ? { ...prev, isVisible: false } : null));
+  };
+
   const addToCart = (newItem: Omit<CartItem, "quantity">) => {
     setCart((prev) => {
       const existing = prev.find((item) => item.id === newItem.id);
       if (existing) {
-        // Zaten varsa miktarını artır
         return prev.map((item) =>
           item.id === newItem.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
-      // Yoksa 1 miktar ile ekle
       return [...prev, { ...newItem, quantity: 1 }];
     });
+    showNotification(`"${newItem.name}" Sepete Eklendi!`);
   };
 
   const removeFromCart = (id: string) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
 
+  const updateQuantity = (id: string, amount: number) => {
+    setCart((prev) => {
+      return prev.map((item) => {
+        if (item.id === id) {
+          const newQuantity = item.quantity + amount;
+          return { ...item, quantity: Math.max(0, newQuantity) };
+        }
+        return item;
+      }).filter((item) => item.quantity > 0);
+    });
+  };
+
   const clearCart = () => {
     setCart([]);
   };
 
-  // Toplam ürün adedi (çeşit değil, toplam miktar)
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, cartCount }}>
+    <CartContext.Provider value={{ 
+      cart, addToCart, removeFromCart, updateQuantity, clearCart, cartCount, notification, hideNotification 
+    }}>
       {children}
     </CartContext.Provider>
   );
