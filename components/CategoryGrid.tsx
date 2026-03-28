@@ -6,10 +6,10 @@ export default async function CategoryGrid() {
   const products = await getAllProducts();
 
   const categories = [
-    { title: "JANT & SPACER", queryParam: "JANT & SPACER" },
-    { title: "BMW OEM PARTS", queryParam: "BMW OEM PARTS" },
-    { title: "COILOVER", queryParam: "COILOVER" },
-    { title: "FREN KİTİ", queryParam: "FREN KİTİ" }
+    { title: "JANT & SPACER", queryParam: "JANT & SPACER", fallback: "https://images.unsplash.com/photo-1596756611364-c2c61aa01a91?q=80&w=1200&auto=format&fit=crop" },
+    { title: "BMW OEM PARTS", queryParam: "BMW OEM PARTS", fallback: "https://images.unsplash.com/photo-1555005881-81d3f6d7abaf?q=80&w=1200&auto=format&fit=crop" },
+    { title: "COILOVER", queryParam: "COILOVER", fallback: "https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=1200&auto=format&fit=crop" },
+    { title: "KULE GERGİLERİ", queryParam: "KULE GERGİLERİ", fallback: "https://images.unsplash.com/photo-1627885011702-861d8032c521?q=80&w=1200&auto=format&fit=crop" } // using a suspension/mechanic type background for strut bar
   ];
 
   return (
@@ -21,7 +21,7 @@ export default async function CategoryGrid() {
             const match = products.find(
               (p) => p.type?.trim().toLowerCase() === cat.title.toLowerCase() && p.image
             );
-            const bgImage = match?.image || null;
+            const bgImage = match?.image || cat.fallback;
 
             return (
               <Link 
@@ -29,15 +29,11 @@ export default async function CategoryGrid() {
                 href={`/magaza?tur=${encodeURIComponent(cat.queryParam)}`}
                 className="group relative block w-full aspect-[4/3] lg:aspect-[16/9] overflow-hidden rounded-md shadow-lg"
               >
-                {/* Arka Plan (Görsel varsa Görsel, yoksa Şık Koyu Gradient) */}
-                {bgImage ? (
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-in-out group-hover:scale-105"
-                    style={{ backgroundImage: `url(${bgImage})` }}
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#111111] to-[#2a2a2a] transition-transform duration-700 ease-in-out group-hover:scale-105" />
-                )}
+                {/* Arka Plan Görseli */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-in-out group-hover:scale-105"
+                  style={{ backgroundImage: `url(${bgImage})` }}
+                />
                 
                 {/* Okunabilirlik İçin Siyah Film (Overlay) */}
                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-500" />
