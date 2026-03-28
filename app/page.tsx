@@ -8,11 +8,10 @@ import { getAllProducts, getUniqueBrands } from "../lib/notion";
 // Animasyonlar SSR uyumlu Client wrapperlarda kalacağı için ana çerçeveyi düz react node kullanarak oluşturuyoruz.
 // Veya 'framer-motion' kullanan kısımları client-side olarak ayırabiliriz.
 import ClientHero from "../components/ClientHero";
-import ClientMarquee from "../components/ClientMarquee";
+import BrandsSlider from "../components/BrandsSlider";
 
 export default async function Home() {
   const products = await getAllProducts();
-  const brands = await getUniqueBrands();
   const featuredProducts = products.slice(0, 4);
 
   return (
@@ -22,7 +21,7 @@ export default async function Home() {
       <ClientHero />
 
       {/* INFINITE MARQUEE (MARKALAR) - Client Component */}
-      <ClientMarquee brands={brands} />
+      <BrandsSlider />
 
       {/* ÖNE ÇIKAN ÜRÜNLER (VİTRİN) - Server Rendered */}
       <section className="max-w-screen-2xl mx-auto px-6 md:px-12 py-32 w-full relative z-20">

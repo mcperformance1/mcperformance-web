@@ -29,9 +29,9 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
   return (
     <div className="min-h-screen bg-black text-white pt-40 px-6 max-w-screen-xl mx-auto flex flex-col pb-32">
        
-       <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 mb-16">
+       <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 xl:gap-20 mb-16 items-start">
            {/* Sol Panel: Görsel */}
-           <div className="w-full lg:w-1/2 aspect-square bg-[#0A0A0A] border border-[#222222] relative overflow-hidden rounded-sm">
+           <div className="w-full lg:w-[45%] xl:w-[40%] aspect-square bg-[#0A0A0A] border border-[#222222] relative overflow-hidden rounded-2xl shadow-2xl">
               <div 
                  className="w-full h-full bg-cover bg-center transition-transform hover:scale-105 duration-700" 
                  style={{ backgroundImage: `url(${product.image})` }} 
@@ -39,28 +39,28 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
            </div>
 
            {/* Sağ Panel: Info, Specs, WhatsApp */}
-           <div className="w-full lg:w-1/2 flex flex-col justify-start">
-              <span className="text-gray-500 font-bold italic uppercase tracking-widest mb-4 inline-block text-sm">
+           <div className="w-full lg:flex-1 flex flex-col justify-start">
+              <span className="text-gray-500 font-bold italic uppercase tracking-widest mb-3 inline-block text-xs md:text-sm">
                  Marka: <span className="text-white">{product.brand || "Bilinmiyor"}</span>
               </span>
               
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-black italic uppercase leading-tight mb-2">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-black italic uppercase leading-tight mb-2">
                 {product.name}
               </h1>
               
-              <p className="text-2xl font-light italic text-gray-300 tracking-widest mb-4">
+              <p className="text-xl md:text-2xl font-medium italic text-gray-300 tracking-widest mb-2">
                 {product.price}
               </p>
               
               {/* Dinamik Özellikler Tablosu */}
               <ProductSpecs specs={product.specs} />
               
-              <div className="mt-8">
+              <div className="mt-6">
                  <a 
                     href={whatsappUrl} 
                     target="_blank" 
                     rel="noreferrer" 
-                    className="block bg-[#FF5722] text-white text-center font-black italic uppercase text-base px-6 py-4 hover:bg-white hover:text-black transition-colors w-full shadow-lg hover:shadow-xl"
+                    className="inline-block bg-[#FF5722] text-white text-center font-black italic uppercase text-sm md:text-base px-10 py-4 hover:bg-white hover:text-black transition-all duration-300 rounded-full shadow-[0_0_20px_rgba(255,87,34,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]"
                  >
                     WHATSAPP İLE BİLGİ AL
                  </a>
@@ -70,7 +70,7 @@ export default async function ProductDetail({ params }: { params: Promise<{ slug
 
        {/* Alt Panel: Açıklama Metni */}
        {product.desc && (
-         <div className="w-full bg-[#0a0a0a] p-8 md:p-12 border-l-4 border-white">
+         <div className="w-full bg-[#0a0a0a] p-6 md:p-10 border border-[#222222] rounded-2xl">
             <h3 className="text-2xl font-black italic uppercase mb-6 text-white border-b border-[#333] pb-4 inline-block">
                Açıklama & Detaylar
             </h3>
