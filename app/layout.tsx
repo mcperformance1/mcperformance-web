@@ -12,6 +12,9 @@ const interFont = Inter({
 export const metadata: Metadata = {
   title: "MC Performance | Otomotiv Performans & Mühendislik",
   description: "Track-Focused Premium Otomotiv Parçaları Kataloğu",
+  icons: {
+    icon: "/image_6.png",
+  },
 };
 
 import { CartProvider } from "../context/CartContext";

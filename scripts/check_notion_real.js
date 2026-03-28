@@ -1,6 +1,15 @@
 require('dotenv').config({ path: '.env.local' });
 const fs = require('fs');
 
+function getPropString(prop) {
+  if (!prop) return "";
+  if (prop.type === "title") return prop.title?.map(t => t.plain_text).join("") || "";
+  if (prop.type === "rich_text") return prop.rich_text?.map(t => t.plain_text).join("") || "";
+  if (prop.type === "select") return prop.select?.name || "";
+  if (prop.type === "multi_select") return prop.multi_select?.map(s => s.name).join(", ") || "";
+  return "";
+}
+
 async function check() {
   const databaseId = process.env.NOTION_DATABASE_ID;
   const token = process.env.NOTION_SECRET;
@@ -21,7 +30,13 @@ async function check() {
         return;
     }
     const data = await res.json();
-    fs.writeFileSync('scripts/notion_output.json', JSON.stringify(data.results[0] ? data.results[0].properties : {empty: true}, null, 2), "utf8");
+    const types = data.results.map(r => {
+        return getPropString(r.properties['Tür']) || getPropString(r.properties['Type']) || "";
+    });
+    
+    const uniqueTypes = [...new Set(types)];
+    fs.writeFileSync('scripts/notion_output.json', JSON.stringify({ uniqueTypes, total: data.results.length }, null, 2), "utf8");
+    console.log("Unique types:", uniqueTypes);
   } catch(e) {
       fs.writeFileSync('scripts/notion_output.json', JSON.stringify({error: e.toString()}));
   }

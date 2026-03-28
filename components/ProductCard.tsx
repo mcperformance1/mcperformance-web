@@ -35,11 +35,12 @@ export default function ProductCard({ data }: ProductProps) {
     >
       <div className="absolute inset-0 border border-transparent group-hover:border-white/30 transition-colors duration-500 rounded-2xl pointer-events-none" />
       
-      {/* Resim alanı (Hover zoom) */}
-      <div className="relative w-full aspect-[4/5] object-cover mb-3 md:mb-4 overflow-hidden bg-[#0A0A0A] rounded-xl">
-        <motion.div 
-           className="w-full h-full bg-cover bg-center transition-transform duration-700 ease-in-out group-hover:scale-105"
-           style={{ backgroundImage: `url(${data.image})` }}
+      {/* Resim alanı (Hover zoom / Adaptif) */}
+      <div className="relative w-full mb-3 md:mb-4 overflow-hidden bg-transparent rounded-xl flex items-center justify-center">
+        <motion.img 
+           src={data.image}
+           alt={data.name}
+           className="w-full h-auto object-contain transition-transform duration-700 ease-in-out group-hover:scale-[1.03]"
         />
       </div>
 

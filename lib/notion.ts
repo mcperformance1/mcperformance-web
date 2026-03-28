@@ -15,6 +15,7 @@ export interface NotionItem {
   price: string;
   desc: string;
   image: string;
+  images?: string[];
   category: string;
   type: string;
   specs: Record<string, string>;
@@ -30,6 +31,11 @@ function getPropString(prop: any): string {
   if (prop.type === "url") return prop.url || "";
   if (prop.type === "files") return prop.files?.[0]?.file?.url || prop.files?.[0]?.external?.url || "";
   return "";
+}
+
+function getPropFilesArray(prop: any): string[] {
+  if (!prop || prop.type !== "files" || !prop.files) return [];
+  return prop.files.map((f: any) => f.file?.url || f.external?.url).filter(Boolean);
 }
 
 function generateSlug(text: string): string {
@@ -64,17 +70,18 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
     return response.results.map((page: any) => {
       const props = page.properties;
       
-      // Fallback to user's localized names if english schema fails
       const name = getPropString(props['Name']) || getPropString(props['Ad']) || "İsimsiz";
       const rawPrice = getPropString(props['Price']) || getPropString(props['Fiyat']);
       const formattedPrice = rawPrice ? (rawPrice.includes("₺") ? rawPrice : `₺${rawPrice}`) : "";
       const rawDesc = getPropString(props['Description']) || getPropString(props['Açıklama']);
       
-      // Since Notion might not have category, default everything to 'Ürün' if empty
       const cat = getPropString(props['Kategori']) || "Ürün";
       const typeStr = getPropString(props['Tür']) || getPropString(props['Type']) || "";
       
-      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Type"];
+      const galleryProp = props['Galeri'] || props['Gallery'] || props['Dosyalar & Medya'] || props['Files & media'];
+      const imagesArray = getPropFilesArray(galleryProp);
+      
+      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Type", "Galeri", "Gallery", "Dosyalar & Medya", "Files & media"];
       const specs: Record<string, string> = {};
       
       for (const [key, prop] of Object.entries(props)) {
@@ -92,6 +99,7 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
         price: formattedPrice,
         desc: rawDesc,
         image: getPropString(props['Image']) || getPropString(props['Görsel (URL)']) || "https://images.unsplash.com/photo-1614200187524-dc4b892acf16?q=80&w=1080&auto=format&fit=crop",
+        images: imagesArray,
         category: cat,
         type: typeStr,
         specs,
@@ -104,7 +112,7 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
 
 export async function getAllProducts() {
   const items = await fetchAllItems();
-  return items.filter(item => item.category.trim().toLowerCase() === "ürün" || item.category === ""); // if empty, treat as product via standard fetch
+  return items.filter(item => item.category.trim().toLowerCase() === "ürün" || item.category === ""); 
 }
 
 export async function getAllProjects() {
@@ -140,7 +148,9 @@ export function normalizeType(text?: string): string {
   try {
     text = decodeURIComponent(text);
   } catch (error) {
-    //
+    // decoding failed
   }
-  return text.trim().toLowerCase();
+  // Tüm boşluk, ampersand ve özel karakterleri yok et (sadece harf/rakam kalsın)
+  // Bu sayede "Jant & Spacer" ile "Jant&Spacer" kusursuz eşleşir.
+  return text.toLowerCase().replace(/[^a-z0-9ğüşıöç]/g, '');
 }

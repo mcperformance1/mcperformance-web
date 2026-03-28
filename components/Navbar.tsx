@@ -5,6 +5,7 @@ import { ShoppingCart, Menu as MenuIcon } from "lucide-react";
 import Menu from "./Menu";
 import CartDrawer from "./CartDrawer";
 import SearchBar from "./SearchBar";
+import MegaMenu from "./MegaMenu";
 import { useCart } from "../context/CartContext";
 
 export default function Navbar() {
@@ -30,10 +31,15 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-screen-2xl mx-auto px-6 md:px-12 flex items-center justify-between">
-          {/* Sol: Daha Makul Logo */}
-          <Link href="/" className="text-xl md:text-2xl font-black italic tracking-tight uppercase text-white drop-shadow-md hover:text-gray-300 transition-colors">
-            MC PERFORMANCE
-          </Link>
+          <div className="flex items-center space-x-8 xl:space-x-12">
+            {/* Sol: Logo */}
+            <Link href="/" className="text-xl md:text-2xl font-black italic tracking-tight uppercase text-white drop-shadow-md hover:text-gray-300 transition-colors">
+              MC PERFORMANCE
+            </Link>
+            
+            {/* Merkez: Mega Menu (Masaüstü için) */}
+            <MegaMenu />
+          </div>
           
           {/* Sağ: İkonlar */}
           <div className="flex items-center space-x-5 md:space-x-8">

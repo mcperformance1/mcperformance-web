@@ -1,85 +1,9 @@
 {
-  "Description": {
-    "id": "HRgw",
-    "type": "rich_text",
-    "rich_text": [
-      {
-        "type": "text",
-        "text": {
-          "content": "WİECHERS SPORT BMW E36 ÖN KULE GERGİSİ",
-          "link": null
-        },
-        "annotations": {
-          "bold": false,
-          "italic": false,
-          "strikethrough": false,
-          "underline": false,
-          "code": false,
-          "color": "default"
-        },
-        "plain_text": "WİECHERS SPORT BMW E36 ÖN KULE GERGİSİ",
-        "href": null
-      }
-    ]
-  },
-  "Image": {
-    "id": "JPzm",
-    "type": "files",
-    "files": [
-      {
-        "name": "E 36 ÖN ÇELİK 2.jpeg",
-        "type": "file",
-        "file": {
-          "url": "https://prod-files-secure.s3.us-west-2.amazonaws.com/50f4bfb9-2029-81bc-a4c3-00036299190e/a99acd99-88bb-4e21-8f12-bf025261f462/E_36_N_ELK_2.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=ASIAZI2LB466REBJ6GET%2F20260327%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20260327T232453Z&X-Amz-Expires=3600&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEB8aCXVzLXdlc3QtMiJHMEUCIQDr%2Fml2W5kltK4J8PmfRBnXwiDUg%2FBv%2FjNlGY%2BVclWhlgIgW17Q4vonZgCRcYGg6mG9wdGp3rHIj7nw8PqOMiTYw4cqiAQI6P%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARAAGgw2Mzc0MjMxODM4MDUiDFiIs%2FwTNV6A8EIylircA2T2oZ9PhV6z15IaIlno8rDtnvXY8sZEtl46zPKDApgagv0mpowmFrWl0H5KXwmbs8SqmeuNPqMoir4SGyDaB9Di9qt9ecszjOtcaBfj6dedDbzi54%2B7gLd7EnpzWe%2B4UTpWXBEjdXEay5%2FeQd296XGqTJhYQ5O9TaouQezuUTC%2BkipqdInAs1Y1nNykXfe%2BGQas%2Bpitz0vYZAu9HI%2BnTuxkDDf1SHz3OkTur3XoWcEfPzrFExBXTsmB38KMnnE1T384dtIMHT9cRvAh40cEN1HvU84m3ohvZ51kOnehvuaqytFJ1lBmVugJTVMOqigIPEiS1LnQYnCbM61ccH2S9oxTJGyemT3aBSwqnei3W9O2KukerAJWerrKTPmMZ3GU41qhmOX2ZowAoeYi9cl43J9NCVLXg3WGQCAPWIvSvDkYhtkInyjqXHGLAMNEcWvwaUnHq19b1BuGgZXMuiM%2FxJasUEQg5Y69TLwOgnLL%2FWVHW31cWd1IFNMBJuH281QM7SW5if6U50m85seYL27Fl9AN2hDBWFUgRQkaYjWwBpzkefGNg78Y1qr9wXtjMTxV9GoPwx3tmhpyB5PxTaAUhYZd9yaFVb0%2F5KItUiwVQLbdnBDT7N7jX6exwwWXMLGZnM4GOqUBl81naYtnS%2BhlG4zAlfWAaNSKZrg8%2BCnxNKSKMjoTtt%2BJGpuCyEvY88mlW1eHyTOfjA37VVkx28weqs%2Blqn4JcBLp4puxTh8QMWpWBBdVK3Mr%2ByY8gt10J3M7M78RAW0jmHzi5aCYy0YbW1ozTiUQOO%2FtMHaFg0xOzHIMrrlRK5SftxfnuDRxI5sZXg8l%2FuT6qQ%2F2JgZQrHaJarFQR4BocCVA%2BTA8&X-Amz-Signature=f7008432afdbb80ec125642d49e0e60cac63d785e6a03e0d7b01cfd77b52de54&X-Amz-SignedHeaders=host&x-amz-checksum-mode=ENABLED&x-id=GetObject",
-          "expiry_time": "2026-03-28T00:24:53.740Z"
-        }
-      }
-    ]
-  },
-  "Status": {
-    "id": "P%3Abb",
-    "type": "checkbox",
-    "checkbox": true
-  },
-  "Slug": {
-    "id": "Ul%3Dy",
-    "type": "select",
-    "select": {
-      "id": "a6738cdd-536a-4669-81fb-f30b40a3b027",
-      "name": "wiechers-sport",
-      "color": "brown"
-    }
-  },
-  "Price": {
-    "id": "gD%7B%3E",
-    "type": "select",
-    "select": {
-      "id": "987162c1-f766-4153-9aec-c52e9b0eda8c",
-      "name": "12000",
-      "color": "gray"
-    }
-  },
-  "Name": {
-    "id": "title",
-    "type": "title",
-    "title": [
-      {
-        "type": "text",
-        "text": {
-          "content": "WİECHERS SPORT E36 KULE GERGİSİ",
-          "link": null
-        },
-        "annotations": {
-          "bold": false,
-          "italic": false,
-          "strikethrough": false,
-          "underline": false,
-          "code": false,
-          "color": "default"
-        },
-        "plain_text": "WİECHERS SPORT E36 KULE GERGİSİ",
-        "href": null
-      }
-    ]
-  }
+  "uniqueTypes": [
+    "Coilover",
+    "Kulegergileri",
+    "Jant&Spacer",
+    ""
+  ],
+  "total": 4
 }

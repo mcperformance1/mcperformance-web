@@ -20,8 +20,11 @@ export default async function Magaza({ searchParams }: { searchParams: Promise<{
   }
 
   if (rawTur) {
-    // Sadece "Tür" (Type) eşleşen ürünleri göster
-    displayedProducts = displayedProducts.filter(p => normalizeType(p.type) === rawTur);
+    // Esnek Eşleştirme: Tam metin yerine "içeriyor mu" kontrolü
+    displayedProducts = displayedProducts.filter(p => {
+       const pType = normalizeType(p.type);
+       return pType === rawTur || pType.includes(rawTur) || rawTur.includes(pType);
+    });
   }
 
   const pageTitle = tur ? `${tur} ÜRÜNLERİ` : "TÜM ÜRÜNLER";

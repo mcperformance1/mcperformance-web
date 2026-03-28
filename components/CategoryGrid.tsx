@@ -6,10 +6,10 @@ export default async function CategoryGrid() {
   const products = await getAllProducts();
 
   const categories = [
-    { title: "JANT & SPACER", queryParam: "JANT & SPACER" },
-    { title: "BMW OEM PARTS", queryParam: "BMW OEM PARTS" },
-    { title: "COILOVER", queryParam: "COILOVER" },
-    { title: "KULE GERGİLERİ", queryParam: "KULE GERGİLERİ" } 
+    { title: "JANT & SPACER", queryParam: "Jant & Spacer" },
+    { title: "BMW OEM PARTS", queryParam: "BMW OEM Parts" },
+    { title: "COILOVER", queryParam: "Coilover" },
+    { title: "KULE GERGİLERİ", queryParam: "Kule Gergileri" } 
   ];
 
   return (
