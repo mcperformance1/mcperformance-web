@@ -3,17 +3,18 @@ import React, { useState, useEffect } from 'react';
 
 interface ProductGalleryProps {
   mainImage: string;
-  galleryImages: string[];
+  galleryImages: string[]; // Notion'daki "Galeri" sütunundan gelen fotolar
 }
 
 export default function ProductGallery({ mainImage, galleryImages }: ProductGalleryProps) {
-  // Notion'dan gelen resimleri temizle
-  const allImages = galleryImages.filter(Boolean);
+  // 1. ADIM: Notion'daki Galeri sütunundan gelen fotoları al (Boşları temizle)
+  // Eğer galeri boşsa sadece ana resmi gösterir, doluysa hepsini listeler
+  const allImages = galleryImages && galleryImages.length > 0 ? galleryImages : [mainImage];
   
-  // Aktif resmi yönetiyoruz
+  // 2. ADIM: Aktif resmi yönet (Başlangıçta ana resmi göster)
   const [activeImage, setActiveImage] = useState(mainImage);
 
-  // Ürün değişirse resmi sıfırla
+  // Ürün değişirse (sayfa arası geçişte) resmi güncelle
   useEffect(() => {
     setActiveImage(mainImage);
   }, [mainImage]);
@@ -21,47 +22,43 @@ export default function ProductGallery({ mainImage, galleryImages }: ProductGall
   return (
     <div className="w-full lg:w-[550px] flex flex-col gap-8">
       
-      {/* --- ANA RESİM: DIŞI TURUNCU ÇERÇEVELİ, SIFIRA SIFIR YAPIŞAN --- */}
-      <div className="w-full rounded-[30px] p-[2px] bg-[#FF5722] shadow-[0_0_20px_rgba(255,87,34,0.3)] transition-all duration-500 overflow-hidden">
+      {/* --- BÜYÜK FOTOĞRAF ALANI (SIFIRA SIFIR VE TURUNCU DIŞ ÇERÇEVELİ) --- */}
+      <div className="w-full rounded-[30px] p-[2px] bg-[#FF5722] shadow-[0_0_25px_rgba(255,87,34,0.4)] overflow-hidden">
         <div className="w-full rounded-[28px] bg-zinc-950 overflow-hidden flex items-center justify-center relative group">
-          
-          {/* Üzerine gelince yanan hafif turuncu katman */}
-          <div className="absolute inset-0 bg-[#FF5722]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-10" />
-          
           <img 
             src={activeImage} 
             alt="MC Performance Ürün" 
-            // 'w-full h-auto' ve 'block' sayesinde boşluk kalmaz, çerçeveye tam oturur
             className="w-full h-auto block transition-transform duration-700 ease-in-out group-hover:scale-105"
           />
         </div>
       </div>
 
-      {/* --- ŞEFFAF GALERİ KUTUCUKLARI (TIKLANABİLİR) --- */}
+      {/* --- KÜÇÜK GALERİ KUTUCUKLARI (ŞEFFAF VE TIKLANABİLİR) --- */}
+      {/* Sadece 1'den fazla fotoğraf varsa veya Notion Galeri doluysa göster */}
       {allImages.length > 0 && (
         <div className="flex flex-wrap gap-4 justify-start items-center">
           
-          {/* Ana Resim Kutucuğu */}
+          {/* Önce Ana Resmi Koyalım (Geri dönmek için) */}
           <button
             onClick={() => setActiveImage(mainImage)}
             className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
               activeImage === mainImage 
-                ? 'border-[#FF5722] scale-110 shadow-[0_0_15px_rgba(255,87,34,0.4)]' 
-                : 'border-white/10 bg-transparent opacity-40 hover:opacity-100 hover:border-[#FF5722]/50'
+                ? 'border-[#FF5722] scale-110 shadow-[0_0_15px_rgba(255,87,34,0.3)] opacity-100' 
+                : 'border-white/10 bg-transparent opacity-40 hover:opacity-100 hover:border-white/30'
             }`}
           >
-            <img src={mainImage} alt="Ana" className="w-full h-full object-cover" />
+            <img src={mainImage} alt="Ana Foto" className="w-full h-full object-cover" />
           </button>
 
-          {/* Galeri resimleri (Şeffaf ve tıklanabilir) */}
-          {allImages.map((img, idx) => (
+          {/* Notion 'Galeri' Sütunundan Gelen Diğer Fotoğraflar */}
+          {galleryImages.map((img, idx) => (
             <button
               key={idx}
               onClick={() => setActiveImage(img)} // TIKLAYINCA YUKARIYI DEĞİŞTİRİR
               className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
                 activeImage === img 
-                  ? 'border-[#FF5722] scale-110 shadow-[0_0_15px_rgba(255,87,34,0.4)]' 
-                  : 'border-white/10 bg-transparent opacity-40 hover:opacity-100 hover:border-[#FF5722]/50'
+                  ? 'border-[#FF5722] scale-110 shadow-[0_0_15px_rgba(255,87,34,0.3)] opacity-100' 
+                  : 'border-white/10 bg-transparent opacity-40 hover:opacity-100 hover:border-white/30'
               }`}
             >
               <img 
