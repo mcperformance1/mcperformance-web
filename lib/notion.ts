@@ -57,12 +57,12 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({}),
-      cache: "no-store" // ensure we don't serve stale Notion data locally if dev caching triggers
+      cache: "no-store" 
     });
 
     if (!res.ok) {
       const errorText = await res.text();
-      throw new Error(`Notion API Bağlantı Hatası: ${errorText}. Lütfen Vercel'deki şifrenin sonuna veya başına boşluk kopyalamadığınızdan emin olun.`);
+      throw new Error(`Notion API Bağlantı Hatası: ${errorText}.`);
     }
 
     const response = await res.json();
@@ -76,12 +76,15 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
       const rawDesc = getPropString(props['Description']) || getPropString(props['Açıklama']);
       
       const cat = getPropString(props['Kategori']) || "Ürün";
-      const typeStr = getPropString(props['Tür']) || getPropString(props['Type']) || "";
+
+      // --- BURADA Tür1 OLARAK GÜNCELLEDİM KANKA ---
+      const typeStr = getPropString(props['Tür1']) || getPropString(props['Tür']) || getPropString(props['Type']) || "";
       
       const galleryProp = props['Galeri'] || props['Gallery'] || props['Dosyalar & Medya'] || props['Files & media'];
       const imagesArray = getPropFilesArray(galleryProp);
       
-      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Type", "Galeri", "Gallery", "Dosyalar & Medya", "Files & media"];
+      // ReservedKeys listesine de Tür1 ekledim ki teknik özelliklerde (specs) kirlilik yapmasın
+      const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Tür1", "Type", "Galeri", "Gallery", "Dosyalar & Medya", "Files & media"];
       const specs: Record<string, string> = {};
       
       for (const [key, prop] of Object.entries(props)) {
@@ -150,7 +153,5 @@ export function normalizeType(text?: string): string {
   } catch (error) {
     // decoding failed
   }
-  // Tüm boşluk, ampersand ve özel karakterleri yok et (sadece harf/rakam kalsın)
-  // Bu sayede "Jant & Spacer" ile "Jant&Spacer" kusursuz eşleşir.
   return text.toLowerCase().replace(/[^a-z0-9ğüşıöç]/g, '');
 }
