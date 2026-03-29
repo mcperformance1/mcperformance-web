@@ -22,7 +22,7 @@ export const MEGA_MENU_DATA = [
   },
   { 
     title: "ELEKTRONİK", 
-    items: ["AEM Performance", "Sprint Booster"] 
+    items: ["MHD TUNING", "AEM Performance", "Sprint Booster"] 
   },
   { 
     title: "AFTERMARKET PARTS", 
@@ -68,9 +68,11 @@ export default function MegaMenu() {
     }, CLOSE_DELAY);
   };
 
+  // --- SLIM-FIT AYARI: text-[9px] yaptık ve tracking'i daralttık ---
   const titleClass = "uppercase font-black italic tracking-[0.1em] text-[9px] xl:text-[10px] text-white/70 hover:text-[#FF5722] transition-all duration-300 py-6 cursor-pointer block whitespace-nowrap";
 
   return (
+    // space-x-4 ve xl:space-x-6 ile Header'da yer açtık
     <div className="hidden lg:flex items-center space-x-4 xl:space-x-6 relative group h-full">
       {MEGA_MENU_DATA.map((cat) => (
         <div 
