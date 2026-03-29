@@ -3,22 +3,48 @@ import { Inter } from "next/font/google";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import "./globals.css";
+import { CartProvider } from "../context/CartContext";
+import Notification from "../components/Notification";
 
 const interFont = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
+// --- SEO MÜHİMMATINI BURAYA YÜKLÜYORUZ ---
 export const metadata: Metadata = {
-  title: "MC Performance | Otomotiv Performans & Mühendislik",
-  description: "Track-Focused Premium Otomotiv Parçaları Kataloğu",
+  title: {
+    default: "MC PERFORMANCE | High-Performance Tuning & Parts",
+    template: "%s | MC PERFORMANCE"
+  },
+  description: "BMW ve VAG grubu araçlar için profesyonel performans çözümleri. Protrack wheels, coilover kitleri, fren sistemleri ve kule gergileri. Track-Focused Premium Tuning.",
+  keywords: [
+    "MC Performance", "BMW Tuning", "VAG Performance", "Protrack One Türkiye", 
+    "Coilover Kiti", "Fren Hortumu", "Kule Gergisi", "Performance Parts Istanbul",
+    "Track Focused Parts", "ST Spacer", "AEM Performance"
+  ],
+  authors: [{ name: "MC Performance" }],
+  creator: "MC Performance",
+  publisher: "MC Performance",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
-    icon: "/image_6.png",
+    icon: "/icon.png",
+    apple: "/icon.png", 
+  },
+  // Google'da önizleme resmi (Sosyal medya için)
+  openGraph: {
+    title: "MC PERFORMANCE | High-Performance Tuning",
+    description: "Track-Focused Premium Otomotiv Parçaları Kataloğu",
+    url: "https://mcperformance.com.tr",
+    siteName: "MC Performance",
+    locale: "tr_TR",
+    type: "website",
   },
 };
-
-import { CartProvider } from "../context/CartContext";
-import Notification from "../components/Notification";
 
 export default function RootLayout({
   children,
@@ -26,8 +52,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="tr" className={`${interFont.variable} font-sans`}>
-      <body className="bg-[#000000] text-white min-h-screen flex flex-col selection:bg-white selection:text-black font-black italic">
+    <html lang="tr" className={`${interFont.variable} font-sans scroll-smooth`}>
+      <body className="bg-[#000000] text-white min-h-screen flex flex-col selection:bg-[#FF5722] selection:text-white font-black italic tracking-widest uppercase antialiased">
         <CartProvider>
           <Notification />
           <Navbar />
