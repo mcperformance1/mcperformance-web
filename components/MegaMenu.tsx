@@ -4,13 +4,47 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 
 export const MEGA_MENU_DATA = [
-  { title: "SÜSPANSİYON", items: ["Coilover Kiti", "Coilspring Kiti", "Spor Yay Kiti"] },
-  { title: "FREN", items: ["Fren Kitleri", "Fren Balataları", "Fren Hortumları"] },
-  { title: "JANT VE SPACER", items: ["Protrack One", "ST Spacer & Bijon", "Protrack Saplama", "Braid Wheels"] },
-  { title: "KULE GERGİLERİ", items: ["Racing Line Aluminyum", "Çelik Serisi"] },
-  { title: "ELEKTRONİK", items: ["AEM Performance", "Sprint Booster"] },
-  { title: "AFTERMARKET PARTS", items: ["S55 Crankhub Kiti"] },
-  { title: "BMW OEM PARTS", items: ["B58 OEM Parts", "S55 OEM Parts"] }
+  { 
+    title: "SÜSPANSİYON & YÜRÜYEN", 
+    items: ["Coilover Kiti", "Coilspring Kiti", "Spor Yay Kiti", "SALINCAK & ROT KOLLARI"] 
+  },
+  { 
+    title: "FREN", 
+    items: ["Fren Kitleri", "Fren Balataları", "Fren Hortumları"] 
+  },
+  { 
+    title: "JANT VE SPACER", 
+    items: ["Protrack One", "ST Spacer & Bijon", "Protrack Saplama", "Braid Wheels"] 
+  },
+  { 
+    title: "KULE GERGİLERİ", 
+    items: ["Racing Line Aluminyum", "Çelik Serisi"] 
+  },
+  { 
+    title: "ELEKTRONİK", 
+    items: ["AEM Performance", "Sprint Booster"] 
+  },
+  { 
+    title: "AFTERMARKET PARTS", 
+    items: [
+      "S55 UPGRADE PARTS", 
+      "B58 UPGRADE PARTS", 
+      "HAVA FİLTRESİ KİTLERİ", 
+      "FORGED ENGINE INTERNALS", 
+      "TIAL SPORT", 
+      "SİLİKON HORTUM SETLERİ",
+      "MOTUL PERFORMANCE OILS"
+    ] 
+  },
+  { 
+    title: "BMW OEM PARTS", 
+    items: [
+      "B58 OEM Parts", 
+      "S55 OEM Parts", 
+      "VİTES TOPUZLARI", 
+      "CARBON LIPS & ACCESSORIES"
+    ] 
+  }
 ];
 
 export default function MegaMenu() {
@@ -34,11 +68,9 @@ export default function MegaMenu() {
     }, CLOSE_DELAY);
   };
 
-  // --- SLIM-FIT AYARI: text-[9px] yaptık ve tracking'i daralttık ---
   const titleClass = "uppercase font-black italic tracking-[0.1em] text-[9px] xl:text-[10px] text-white/70 hover:text-[#FF5722] transition-all duration-300 py-6 cursor-pointer block whitespace-nowrap";
 
   return (
-    // space-x-4 ve xl:space-x-6 ile Header'da yer açtık
     <div className="hidden lg:flex items-center space-x-4 xl:space-x-6 relative group h-full">
       {MEGA_MENU_DATA.map((cat) => (
         <div 
