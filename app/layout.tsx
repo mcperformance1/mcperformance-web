@@ -11,8 +11,9 @@ const interFont = Inter({
   subsets: ["latin"],
 });
 
-// --- SEO MÜHİMMATINI BURAYA YÜKLÜYORUZ ---
+// --- SEO VE MARKA MÜHİMMATI ---
 export const metadata: Metadata = {
+  metadataBase: new URL('https://mcperformance.com.tr'),
   title: {
     default: "MC PERFORMANCE | High-Performance Tuning & Parts",
     template: "%s | MC PERFORMANCE"
@@ -31,16 +32,30 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  // --- SEKMELERE TABELAYI (ICON) ASIYORUZ ---
   icons: {
-    icon: "/icon.png",
-    apple: "/icon.png", 
+    icon: [
+      { url: "/icon.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon.png", sizes: "192x192", type: "image/png" },
+    ],
+    shortcut: "/icon.png",
+    apple: [
+      { url: "/icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
-  // Google'da önizleme resmi (Sosyal medya için)
+  // ------------------------------------------
   openGraph: {
     title: "MC PERFORMANCE | High-Performance Tuning",
     description: "Track-Focused Premium Otomotiv Parçaları Kataloğu",
     url: "https://mcperformance.com.tr",
     siteName: "MC Performance",
+    images: [
+      {
+        url: '/icon.png', 
+        width: 800,
+        height: 800,
+      },
+    ],
     locale: "tr_TR",
     type: "website",
   },
