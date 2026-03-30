@@ -34,56 +34,27 @@ export default async function Magaza({ searchParams }: { searchParams: Promise<{
     });
   }
 
-  // --- REYON GERİ DÖNÜŞ MANTIĞI (MOBİL MEGA MENÜ İÇİN) ---
-  // Eğer "Protrack One"daysa "JANT VE SPACER"a dönmesini sağlarız
-  const getParentCategory = (currentTur?: string) => {
-    if (!currentTur) return null;
-    const turUpper = currentTur.toUpperCase();
-    
-    if (["COILOVER KİTİ", "COILSPRING KİTİ", "SPOR YAY KİTİ", "SALINCAK & ROT KOLLARI"].includes(turUpper)) 
-      return { title: "SÜSPANSİYON & YÜRÜYEN", slug: "SÜSPANSİYON & YÜRÜYEN" };
-    
-    if (["FREN KİTLERİ", "FREN BALATALARI", "FREN HORTUMLARI"].includes(turUpper)) 
-      return { title: "FREN SİSTEMLERİ", slug: "FREN" };
-    
-    if (["PROTRACK ONE", "ST SPACER & BİJON", "PROTRACK SAPLAMA", "BRAID WHEELS"].includes(turUpper)) 
-      return { title: "JANT VE SPACER", slug: "JANT VE SPACER" };
-    
-    if (["S55 UPGRADE PARTS", "B58 UPGRADE PARTS", "HAVA FİLTRESİ KİTLERİ", "TIAL SPORT"].includes(turUpper)) 
-      return { title: "AFTERMARKET PARTS", slug: "AFTERMARKET PARTS" };
-
-    return { title: "TÜM ÜRÜNLER", slug: "" };
-  };
-
-  const parentCat = getParentCategory(tur);
   const pageTitle = tur ? `${tur.toUpperCase()}` : "TÜM ÜRÜNLER";
 
   return (
     <div className="min-h-screen bg-black text-white pt-32 px-6 max-w-screen-2xl mx-auto flex flex-col items-center">
         
-        {/* DİNAMİK REYON NAVİGASYONU */}
+        {/* DİNAMİK MENÜ NAVİGASYONU - ARTIK DİREKT MEGA MENÜYE ATAR */}
         <div className="w-full flex items-center justify-start mb-8 overflow-hidden">
-          {tur || query ? (
-            <Link 
-              href={parentCat?.slug ? `/magaza?tur=${encodeURIComponent(parentCat.slug)}` : "/magaza"} 
-              className="group flex items-center gap-3 text-zinc-500 hover:text-[#FF5722] transition-all duration-300"
-            >
-              <div className="p-2 rounded-full border border-zinc-900 group-hover:border-[#FF5722]/50 bg-zinc-950/50 transition-all">
-                <ChevronLeft size={16} strokeWidth={3} />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-black italic uppercase text-[9px] tracking-[0.2em] opacity-50">ÜST REYONA DÖN</span>
-                <span className="font-black italic uppercase text-[11px] tracking-widest text-zinc-300 group-hover:text-white">
-                  {parentCat?.title || "MAĞAZA"}
-                </span>
-              </div>
-            </Link>
-          ) : (
-            <Link href="/" className="group flex items-center gap-2 text-zinc-500 hover:text-white transition-all">
-               <ChevronLeft size={16} />
-               <span className="font-black italic uppercase text-[10px] tracking-widest text-zinc-500 group-hover:text-[#FF5722]">ANA SAYFAYA DÖN</span>
-            </Link>
-          )}
+          <Link 
+            href="/?showMenu=true" 
+            className="group flex items-center gap-3 text-zinc-500 hover:text-[#FF5722] transition-all duration-300"
+          >
+            <div className="p-2 rounded-full border border-zinc-900 group-hover:border-[#FF5722]/50 bg-zinc-950/50 transition-all">
+              <ChevronLeft size={16} strokeWidth={3} />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-black italic uppercase text-[9px] tracking-[0.2em] opacity-50 leading-none mb-1">MENÜYE DÖN</span>
+              <span className="font-black italic uppercase text-[11px] tracking-widest text-zinc-300 group-hover:text-white transition-colors">
+                KATEGORİ SEÇİMİ
+              </span>
+            </div>
+          </Link>
         </div>
 
         <h1 className="text-4xl md:text-5xl font-black italic uppercase mb-16 text-center drop-shadow-lg tracking-[0.2em]">
@@ -100,8 +71,11 @@ export default async function Magaza({ searchParams }: { searchParams: Promise<{
               <p className="text-gray-500 font-bold italic text-xl">
                 Sonuç bulunamadı.
               </p>
-              <Link href="/magaza" className="mt-6 inline-block text-[#FF5722] font-black italic uppercase text-[11px] tracking-widest border-b border-[#FF5722]">
-                TÜM LİSTEYİ SIFIRLA
+              <Link 
+                href="/?showMenu=true" 
+                className="mt-6 inline-block text-[#FF5722] font-black italic uppercase text-[11px] tracking-widest border-b border-[#FF5722] hover:text-white transition-colors"
+              >
+                KATEGORİLERE GERİ DÖN →
               </Link>
             </div>
           )}
