@@ -30,25 +30,25 @@ export default function Navbar() {
           isScrolled ? "bg-black/98 border-b border-white/5 py-2 shadow-[0_10px_40px_rgba(0,0,0,0.7)]" : "bg-transparent py-5"
         }`}
       >
+        {/* Container'ı flex-col yaptık ki mobilde elemanlar alt alta düzgün dizilsin */}
         <div className="max-w-screen-2xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row lg:items-center relative min-h-12">
           
-          {/* ÜST SATIR: LOGO VE İKONLAR */}
+          {/* ÜST SATIR: LOGO VE İKONLAR (Mobilde yan yana) */}
           <div className="flex items-center justify-between w-full lg:w-auto">
-            {/* SOL: LOGO (AGRESİF VE SERT) */}
+            {/* SOL: LOGO */}
             <div className="flex-shrink-0 z-50">
               <Link href="/" className="text-lg md:text-xl font-black italic tracking-tighter uppercase text-white hover:text-[#FF5722] transition-all duration-300">
                 MC PERFORMANCE
               </Link>
             </div>
 
-            {/* SAĞ: MOBİL İKONLAR (Sadece Mobilde Yan Yana) */}
-            <div className="flex items-center space-x-4 z-50 lg:hidden">
-              {/* Sepet - Mobil */}
+            {/* SAĞ: MOBİL İKONLAR */}
+            <div className="flex items-center space-x-5 z-50 lg:hidden">
               <button 
                 onClick={() => setIsCartOpen(true)} 
                 className="text-white hover:text-[#FF5722] transition-all relative"
               >
-                <ShoppingCart size={20} strokeWidth={2.5} />
+                <ShoppingCart size={22} strokeWidth={2.5} />
                 {cartCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-[#FF5722] text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center italic">
                     {cartCount}
@@ -56,26 +56,23 @@ export default function Navbar() {
                 )}
               </button>
 
-              {/* Hamburger - Mobil */}
               <button onClick={() => setIsMenuOpen(true)} className="text-white hover:text-[#FF5722] transition-all">
-                <MenuIcon size={24} strokeWidth={2.5} />
+                <MenuIcon size={26} strokeWidth={2.5} />
               </button>
             </div>
           </div>
           
-          {/* MERKEZ: MEGA MENU (DÜNYANIN MERKEZİ GİBİ TAM ORTADA) */}
+          {/* MERKEZ: DESKTOP MEGA MENU */}
           <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center justify-center w-full max-w-max px-4">
             <MegaMenu />
           </div>
           
-          {/* SAĞ: İKONLAR (DESKTOP İÇİN HIZLI ERİŞİM) */}
-          <div className="hidden lg:ml-auto lg:flex items-center space-x-4 md:space-x-7 z-50">
-            {/* Arama Butonu - Desktop */}
+          {/* SAĞ: DESKTOP İKONLAR */}
+          <div className="hidden lg:ml-auto lg:flex items-center space-x-7 z-50">
             <div className="scale-90">
               <SearchBar />
             </div>
 
-            {/* Sepet - Desktop */}
             <button 
               onClick={() => setIsCartOpen(true)} 
               className="group text-white hover:text-[#FF5722] transition-all flex items-center gap-2"
@@ -93,15 +90,16 @@ export default function Navbar() {
               </span>
             </button>
 
-            {/* Hamburger - Desktop */}
             <button onClick={() => setIsMenuOpen(true)} className="text-white hover:text-[#FF5722] transition-all">
               <MenuIcon size={24} strokeWidth={2.5} />
             </button>
           </div>
 
-          {/* MOBİL SEARCH BAR (Logonun Altına Jilet Gibi İndi) */}
-          <div className="w-full mt-4 lg:hidden">
-            <SearchBar />
+          {/* MOBİL SEARCH BAR: BOYDAN BOYA VE ORTALI */}
+          <div className="w-full mt-5 lg:hidden px-2 animate-in fade-in slide-in-from-top-2 duration-500">
+            <div className="w-full border-t border-white/10 pt-4">
+               <SearchBar />
+            </div>
           </div>
 
         </div>
