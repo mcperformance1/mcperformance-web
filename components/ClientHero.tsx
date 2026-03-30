@@ -1,7 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // useEffect eklendi
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation"; // SearchParams eklendi
 import { X, ChevronDown, ChevronRight } from "lucide-react";
 
 // MEGA MENÜ DATASI - KODUN ANA GÖVDESİ
@@ -52,6 +53,14 @@ const MEGA_MENU_DATA = [
 export default function ClientHero() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+  const searchParams = useSearchParams(); // URL'deki parametreleri okumak için
+
+  // --- MAGAZA SAYFASINDAN GELEN TETİKLEYİCİ ---
+  useEffect(() => {
+    if (searchParams.get("showMenu") === "true") {
+      setIsCategoryOpen(true);
+    }
+  }, [searchParams]);
 
   const toggleAccordion = (title: string) => {
     setOpenAccordion(openAccordion === title ? null : title);
@@ -59,7 +68,7 @@ export default function ClientHero() {
 
   return (
     <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
-      {/* ARKA PLAN - AYNI KALDI */}
+      {/* ARKA PLAN */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/images/hero.png')" }}
@@ -67,7 +76,7 @@ export default function ClientHero() {
       <div className="absolute inset-0 z-10 bg-[#000000]/80 mix-blend-multiply" />
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#000000] via-transparent to-[#000000]/60" />
       
-      {/* ANA İÇERİK - MASAÜSTÜ VE MOBİL ORTAK BAŞLIK */}
+      {/* ANA İÇERİK */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95, filter: "blur(5px)" }}
         animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
@@ -86,38 +95,32 @@ export default function ClientHero() {
            OTOMOTİV YEDEK PARÇA & PERFORMANS PARÇALARI
         </motion.p>
         
-        {/* DESKTOP BUTON - DOKUNMADIK */}
+        {/* BUTON GRUBU - HEM MOBİL HEM DESKTOP İÇİN AYARLANDI */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 0.8, duration: 0.5 }}
-           className="hidden md:block"
+           className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 w-full"
         >
-          <Link 
-            href="/magaza"
-            className="text-white border-b border-white/50 pb-1 px-2 font-black italic uppercase tracking-widest text-sm md:text-base hover:text-gray-300 hover:border-white transition-colors"
-          >
-            TÜM MAĞAZAYI İNCELE
-          </Link>
-        </motion.div>
-
-        {/* MOBİL TETİKLEYİCİ BUTON */}
-        <motion.div
-           initial={{ opacity: 0, y: 20 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ delay: 0.8, duration: 0.5 }}
-           className="flex flex-col items-center w-full md:hidden"
-        >
+          {/* KATEGORİ SEÇİMİ (Masaüstünde de Mağazaya Git gibi çalışır ama asıl Mobilde Panel Açar) */}
           <button 
             onClick={() => setIsCategoryOpen(true)}
-            className="text-[#FF5722] border-2 border-[#FF5722]/50 bg-[#FF5722]/10 py-4 px-10 rounded-full font-black italic uppercase tracking-[0.25em] text-[12px] active:scale-95 transition-all shadow-[0_0_30px_rgba(255,87,34,0.3)]"
+            className="w-[280px] md:w-auto text-[#FF5722] border-2 border-[#FF5722]/50 bg-[#FF5722]/10 py-4 px-10 rounded-full font-black italic uppercase tracking-[0.25em] text-[12px] active:scale-95 transition-all shadow-[0_0_30px_rgba(255,87,34,0.3)] hover:bg-[#FF5722] hover:text-white"
           >
             KATEGORİ SEÇİMİ
           </button>
+
+          {/* PROJELERİMİZ BUTONU (Yeni eklendi) */}
+          <Link 
+            href="/projeler"
+            className="w-[280px] md:w-auto text-white border-2 border-white/20 bg-white/5 py-4 px-10 rounded-full font-black italic uppercase tracking-[0.25em] text-[12px] active:scale-95 transition-all hover:bg-white hover:text-black"
+          >
+            TÜM PROJELERİMİZ
+          </Link>
         </motion.div>
       </motion.div>
 
-      {/* MOBİL KATEGORİ PANELİ - TÜM DETAYLAR BURADA */}
+      {/* MOBİL KATEGORİ PANELİ */}
       <AnimatePresence>
         {isCategoryOpen && (
           <motion.div 
@@ -127,7 +130,7 @@ export default function ClientHero() {
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed inset-0 z-[100] bg-black/98 backdrop-blur-3xl md:hidden flex flex-col"
           >
-            {/* KAPATMA BARIDIR - ÖNEMLİ */}
+            {/* KAPATMA BARI */}
             <div className="flex justify-end p-8 flex-shrink-0">
               <button 
                 onClick={() => setIsCategoryOpen(false)}
@@ -137,7 +140,7 @@ export default function ClientHero() {
               </button>
             </div>
 
-            {/* KAYDIRILABİLİR LİSTE ALANI - 200 SATIRLIK ZENGİNLİK BURADA */}
+            {/* KAYDIRILABİLİR LİSTE ALANI */}
             <div className="flex-1 overflow-y-auto px-6 pb-24 scrollbar-hide">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -173,7 +176,6 @@ export default function ClientHero() {
                         />
                       </button>
 
-                      {/* ALT KATEGORİLER - DETAYLI ANİMASYON */}
                       <AnimatePresence>
                         {isOpen && (
                           <motion.div
@@ -206,7 +208,6 @@ export default function ClientHero() {
                 })}
               </div>
 
-              {/* ALT KAPATMA BUTONU */}
               <div className="py-12 flex justify-center">
                 <button 
                   onClick={() => setIsCategoryOpen(false)}
