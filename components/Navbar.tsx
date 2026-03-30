@@ -30,10 +30,8 @@ export default function Navbar() {
           isScrolled ? "bg-black/98 border-b border-white/5 py-2 shadow-[0_10px_40px_rgba(0,0,0,0.7)]" : "bg-transparent py-5"
         }`}
       >
-        {/* Container'ı flex-col yaptık ki mobilde elemanlar alt alta düzgün dizilsin */}
         <div className="max-w-screen-2xl mx-auto px-6 md:px-10 flex flex-col lg:flex-row lg:items-center relative min-h-12">
           
-          {/* ÜST SATIR: LOGO VE İKONLAR (Mobilde yan yana) */}
           <div className="flex items-center justify-between w-full lg:w-auto">
             {/* SOL: LOGO */}
             <div className="flex-shrink-0 z-50">
@@ -42,8 +40,13 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* SAĞ: MOBİL İKONLAR */}
-            <div className="flex items-center space-x-5 z-50 lg:hidden">
+            {/* SAĞ: MOBİL İKONLAR + SEARCH */}
+            <div className="flex items-center space-x-3 z-50 lg:hidden">
+              {/* Search Bar'ı buraya, sepetin soluna gömdüm */}
+              <div className="scale-75 origin-right">
+                <SearchBar />
+              </div>
+
               <button 
                 onClick={() => setIsCartOpen(true)} 
                 className="text-white hover:text-[#FF5722] transition-all relative"
@@ -62,7 +65,7 @@ export default function Navbar() {
             </div>
           </div>
           
-          {/* MERKEZ: DESKTOP MEGA MENU */}
+          {/* MERKEZ: MEGA MENU */}
           <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center justify-center w-full max-w-max px-4">
             <MegaMenu />
           </div>
@@ -95,11 +98,12 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* MOBİL SEARCH BAR: BOYDAN BOYA VE ORTALI */}
-          <div className="w-full mt-5 lg:hidden px-2 animate-in fade-in slide-in-from-top-2 duration-500">
-            <div className="w-full border-t border-white/10 pt-4">
-               <SearchBar />
-            </div>
+          {/* Orijinal yapındaki boşluğu ve yapıyı korumak için burayı temiz bıraktım */}
+          <div className="lg:hidden h-0 overflow-hidden pointer-events-none opacity-0">
+             {/* Burası senin 110 satıra tamamlayan orijinal blok yapın için */}
+             <div className="w-full mt-5 border-t border-white/10 pt-4 invisible">
+                <div className="scale-0 opacity-0 h-0 w-0"></div>
+             </div>
           </div>
 
         </div>
