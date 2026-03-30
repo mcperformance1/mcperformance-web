@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react"; // useEffect eklendi
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation"; // SearchParams eklendi
+import { useSearchParams } from "next/navigation";
 import { X, ChevronDown, ChevronRight } from "lucide-react";
 
-// MEGA MENÜ DATASI - KODUN ANA GÖVDESİ
+// MEGA MENÜ DATASI
 const MEGA_MENU_DATA = [
   { 
     title: "SÜSPANSİYON & YÜRÜYEN", 
@@ -53,9 +53,8 @@ const MEGA_MENU_DATA = [
 export default function ClientHero() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<string | null>(null);
-  const searchParams = useSearchParams(); // URL'deki parametreleri okumak için
+  const searchParams = useSearchParams();
 
-  // --- MAGAZA SAYFASINDAN GELEN TETİKLEYİCİ ---
   useEffect(() => {
     if (searchParams.get("showMenu") === "true") {
       setIsCategoryOpen(true);
@@ -95,32 +94,40 @@ export default function ClientHero() {
            OTOMOTİV YEDEK PARÇA & PERFORMANS PARÇALARI
         </motion.p>
         
-        {/* BUTON GRUBU - HEM MOBİL HEM DESKTOP İÇİN AYARLANDI */}
+        {/* BUTON GRUBU */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 0.8, duration: 0.5 }}
-           className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 w-full"
+           className="flex flex-col items-center justify-center gap-4 w-full"
         >
-          {/* KATEGORİ SEÇİMİ (Masaüstünde de Mağazaya Git gibi çalışır ama asıl Mobilde Panel Açar) */}
+          {/* KATEGORİ SEÇİMİ (SADECE MOBİLDE GÖZÜKÜR: md:hidden) */}
           <button 
             onClick={() => setIsCategoryOpen(true)}
-            className="w-[280px] md:w-auto text-[#FF5722] border-2 border-[#FF5722]/50 bg-[#FF5722]/10 py-4 px-10 rounded-full font-black italic uppercase tracking-[0.25em] text-[12px] active:scale-95 transition-all shadow-[0_0_30px_rgba(255,87,34,0.3)] hover:bg-[#FF5722] hover:text-white"
+            className="md:hidden w-[280px] text-[#FF5722] border-2 border-[#FF5722]/50 bg-[#FF5722]/10 py-4 px-10 rounded-full font-black italic uppercase tracking-[0.25em] text-[12px] active:scale-95 transition-all shadow-[0_0_30px_rgba(255,87,34,0.3)]"
           >
             KATEGORİ SEÇİMİ
           </button>
 
-          {/* PROJELERİMİZ BUTONU (Yeni eklendi) */}
+          {/* TÜM PROJELERİMİZ (HEM WEB HEM MOBİLDE GÖZÜKÜR) */}
           <Link 
             href="/projeler"
-            className="w-[280px] md:w-auto text-white border-2 border-white/20 bg-white/5 py-4 px-10 rounded-full font-black italic uppercase tracking-[0.25em] text-[12px] active:scale-95 transition-all hover:bg-white hover:text-black"
+            className="w-[280px] md:w-auto text-white border-2 border-white/20 bg-white/5 py-4 px-12 rounded-full font-black italic uppercase tracking-[0.25em] text-[12px] active:scale-95 transition-all hover:bg-white hover:text-black hover:border-white shadow-xl"
           >
             TÜM PROJELERİMİZ
+          </Link>
+
+          {/* Web'de altta ince bir "Mağazaya Git" linki istersen diye (opsiyonel) */}
+          <Link 
+            href="/magaza"
+            className="hidden md:block text-white/30 hover:text-white font-black italic uppercase tracking-widest text-[10px] mt-4 transition-colors"
+          >
+            Veya Direkt Mağazaya Göz At →
           </Link>
         </motion.div>
       </motion.div>
 
-      {/* MOBİL KATEGORİ PANELİ */}
+      {/* MOBİL KATEGORİ PANELİ (DEĞİŞMEDİ) */}
       <AnimatePresence>
         {isCategoryOpen && (
           <motion.div 
@@ -130,23 +137,14 @@ export default function ClientHero() {
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed inset-0 z-[100] bg-black/98 backdrop-blur-3xl md:hidden flex flex-col"
           >
-            {/* KAPATMA BARI */}
             <div className="flex justify-end p-8 flex-shrink-0">
-              <button 
-                onClick={() => setIsCategoryOpen(false)}
-                className="text-white/40 hover:text-[#FF5722] p-2 transition-all"
-              >
+              <button onClick={() => setIsCategoryOpen(false)} className="text-white/40 hover:text-[#FF5722] p-2 transition-all">
                 <X size={36} strokeWidth={3} />
               </button>
             </div>
 
-            {/* KAYDIRILABİLİR LİSTE ALANI */}
             <div className="flex-1 overflow-y-auto px-6 pb-24 scrollbar-hide">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-              >
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
                 <p className="text-[#FF5722] font-black italic tracking-[0.4em] text-[10px] uppercase mb-10 text-center opacity-80">
                   PERFORMANS REYONLARI
                 </p>
@@ -170,10 +168,7 @@ export default function ClientHero() {
                         <span className={`font-black italic uppercase tracking-widest text-[13px] ${isOpen ? 'text-[#FF5722]' : 'text-white'}`}>
                           {cat.title}
                         </span>
-                        <ChevronDown 
-                          className={`text-[#FF5722] transition-transform duration-500 ${isOpen ? "rotate-180" : ""}`} 
-                          size={20} 
-                        />
+                        <ChevronDown className={`text-[#FF5722] transition-transform duration-500 ${isOpen ? "rotate-180" : ""}`} size={20} />
                       </button>
 
                       <AnimatePresence>
@@ -209,10 +204,7 @@ export default function ClientHero() {
               </div>
 
               <div className="py-12 flex justify-center">
-                <button 
-                  onClick={() => setIsCategoryOpen(false)}
-                  className="text-white/20 hover:text-white font-black italic uppercase tracking-[0.3em] text-[10px] transition-all"
-                >
+                <button onClick={() => setIsCategoryOpen(false)} className="text-white/20 hover:text-white font-black italic uppercase tracking-[0.3em] text-[10px] transition-all">
                    MENÜYÜ KAPAT
                 </button>
               </div>
