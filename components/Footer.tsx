@@ -20,7 +20,7 @@ export default function Footer() {
         <div className="mb-10">
           <Link href="/" className="group">
              <Image 
-               src="/images/logo.png" // Images klasöründen çekiyoruz
+               src="/images/logo_clean.png" // Images klasöründen çekiyoruz
                alt="MC Performance" 
                width={160} 
                height={60} 
