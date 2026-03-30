@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { X, ChevronDown, ChevronRight } from "lucide-react";
 
-// WEB'DEKİ MEGA MENÜ DATASININ BİREBİR AYNISI
+// MEGA MENÜ DATASI - KODUN ANA GÖVDESİ
 const MEGA_MENU_DATA = [
   { 
     title: "SÜSPANSİYON & YÜRÜYEN", 
@@ -59,6 +59,7 @@ export default function ClientHero() {
 
   return (
     <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
+      {/* ARKA PLAN - AYNI KALDI */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/images/hero.png')" }}
@@ -66,6 +67,7 @@ export default function ClientHero() {
       <div className="absolute inset-0 z-10 bg-[#000000]/80 mix-blend-multiply" />
       <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#000000] via-transparent to-[#000000]/60" />
       
+      {/* ANA İÇERİK - MASAÜSTÜ VE MOBİL ORTAK BAŞLIK */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95, filter: "blur(5px)" }}
         animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
@@ -76,15 +78,15 @@ export default function ClientHero() {
           MC PERFORMANCE
         </h1>
         <motion.p 
-           initial={{ opacity: 0, y: 15 }}
-           animate={{ opacity: 1, y: 0 }}
-           transition={{ delay: 0.4, duration: 0.8 }}
-           className="text-gray-400 font-black italic uppercase tracking-[0.2em] text-sm md:text-lg mt-4 mb-8 max-w-2xl px-4 drop-shadow-lg"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.8 }}
+          className="text-gray-400 font-black italic uppercase tracking-[0.2em] text-sm md:text-lg mt-4 mb-8 max-w-2xl px-4 drop-shadow-lg"
         >
            OTOMOTİV YEDEK PARÇA & PERFORMANS PARÇALARI
         </motion.p>
         
-        {/* DESKTOP GÖRÜNÜM: DEĞİŞMEDİ */}
+        {/* DESKTOP BUTON - DOKUNMADIK */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -99,7 +101,7 @@ export default function ClientHero() {
           </Link>
         </motion.div>
 
-        {/* MOBİL GÖRÜNÜM: TEK BUTON KATEGORİ SİSTEMİ */}
+        {/* MOBİL TETİKLEYİCİ BUTON */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -108,107 +110,111 @@ export default function ClientHero() {
         >
           <button 
             onClick={() => setIsCategoryOpen(true)}
-            className="text-[#FF5722] border-2 border-[#FF5722]/50 bg-[#FF5722]/10 py-4 px-10 rounded-full font-black italic uppercase tracking-[0.25em] text-[12px] active:scale-95 transition-all duration-300 shadow-[0_0_30px_rgba(255,87,34,0.3)]"
+            className="text-[#FF5722] border-2 border-[#FF5722]/50 bg-[#FF5722]/10 py-4 px-10 rounded-full font-black italic uppercase tracking-[0.25em] text-[12px] active:scale-95 transition-all shadow-[0_0_30px_rgba(255,87,34,0.3)]"
           >
             KATEGORİ SEÇİMİ
           </button>
-          
-          <Link 
-            href="/magaza"
-            className="text-white/30 font-black italic uppercase tracking-widest text-[9px] mt-8"
-          >
-            Veya Direkt Mağazaya Git →
-          </Link>
         </motion.div>
       </motion.div>
 
-      {/* MOBİL KATEGORİ PANELİ (AKORDEONLU) */}
+      {/* MOBİL KATEGORİ PANELİ - TÜM DETAYLAR BURADA */}
       <AnimatePresence>
         {isCategoryOpen && (
           <motion.div 
-            initial={{ opacity: 0, y: 100 }}
+            initial={{ opacity: 0, y: "100%" }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 100 }}
-            className="fixed inset-0 z-[100] bg-black/98 backdrop-blur-2xl flex flex-col p-8 md:hidden"
+            exit={{ opacity: 0, y: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed inset-0 z-[100] bg-black/98 backdrop-blur-3xl md:hidden flex flex-col"
           >
-            {/* KAPATMA BUTONU */}
-            <div className="flex justify-end mb-8">
+            {/* KAPATMA BARIDIR - ÖNEMLİ */}
+            <div className="flex justify-end p-8 flex-shrink-0">
               <button 
                 onClick={() => setIsCategoryOpen(false)}
-                className="text-white/50 hover:text-[#FF5722] p-2"
+                className="text-white/40 hover:text-[#FF5722] p-2 transition-all"
               >
                 <X size={36} strokeWidth={3} />
               </button>
             </div>
 
-            {/* AKORDEON LİSTESİ */}
-            <div className="flex flex-col space-y-3 overflow-y-auto pr-2 pb-20">
-              <p className="text-[#FF5722] font-black italic tracking-[0.4em] text-[11px] uppercase mb-6 text-center">
-                PERFORMANS REYONLARI
-              </p>
+            {/* KAYDIRILABİLİR LİSTE ALANI - 200 SATIRLIK ZENGİNLİK BURADA */}
+            <div className="flex-1 overflow-y-auto px-6 pb-24 scrollbar-hide">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <p className="text-[#FF5722] font-black italic tracking-[0.4em] text-[10px] uppercase mb-10 text-center opacity-80">
+                  PERFORMANS REYONLARI
+                </p>
+              </motion.div>
               
-              {MEGA_MENU_DATA.map((cat, index) => {
-                const isOpen = openAccordion === cat.title;
-                return (
-                  <motion.div
-                    key={cat.title}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="bg-zinc-900/50 border border-white/10 rounded-2xl overflow-hidden"
-                  >
-                    {/* ANA BAŞLIK */}
-                    <button 
-                      onClick={() => toggleAccordion(cat.title)}
-                      className="group flex items-center justify-between w-full p-5 active:bg-[#FF5722]/10 transition-all"
+              <div className="flex flex-col space-y-4">
+                {MEGA_MENU_DATA.map((cat, index) => {
+                  const isOpen = openAccordion === cat.title;
+                  return (
+                    <motion.div 
+                      key={cat.title}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 + 0.3 }}
+                      className="flex flex-col w-full bg-zinc-900/30 border border-white/5 rounded-3xl overflow-hidden shrink-0"
                     >
-                      <span className="text-white font-black italic uppercase tracking-widest text-[12px] text-left">
-                        {cat.title}
-                      </span>
-                      <ChevronDown 
-                        className={`text-[#FF5722] transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} 
-                        size={20} 
-                      />
-                    </button>
+                      <button 
+                        onClick={() => toggleAccordion(cat.title)}
+                        className={`flex items-center justify-between w-full p-6 text-left transition-all duration-300 ${isOpen ? 'bg-[#FF5722]/10' : 'active:bg-white/5'}`}
+                      >
+                        <span className={`font-black italic uppercase tracking-widest text-[13px] ${isOpen ? 'text-[#FF5722]' : 'text-white'}`}>
+                          {cat.title}
+                        </span>
+                        <ChevronDown 
+                          className={`text-[#FF5722] transition-transform duration-500 ${isOpen ? "rotate-180" : ""}`} 
+                          size={20} 
+                        />
+                      </button>
 
-                    {/* ALT KATEGORİLER */}
-                    <AnimatePresence>
-                      {isOpen && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="border-t border-white/5 bg-black/40"
-                        >
-                          <ul className="flex flex-col space-y-1 p-4">
-                            {cat.items.map((subItem) => (
-                              <li key={subItem}>
+                      {/* ALT KATEGORİLER - DETAYLI ANİMASYON */}
+                      <AnimatePresence>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+                            className="bg-black/40 border-t border-white/5"
+                          >
+                            <div className="flex flex-col p-3">
+                              {cat.items.map((subItem) => (
                                 <Link 
+                                  key={subItem}
                                   href={`/magaza?tur=${encodeURIComponent(subItem)}`}
                                   onClick={() => setIsCategoryOpen(false)}
-                                  className="group flex items-center justify-between py-3 px-4 rounded-xl text-gray-400 active:text-white active:bg-white/5 transition-all"
+                                  className="flex items-center justify-between py-4 px-6 rounded-2xl group active:bg-[#FF5722]/20 transition-all"
                                 >
-                                  <span className="font-black italic uppercase text-[10px] tracking-[0.1em]">
+                                  <span className="text-gray-400 group-active:text-white font-black italic uppercase text-[11px] tracking-wider transition-colors">
                                     {subItem}
                                   </span>
-                                  <ChevronRight className="text-[#FF5722]" size={14} />
+                                  <ChevronRight size={14} className="text-[#FF5722] opacity-50 group-active:opacity-100" />
                                 </Link>
-                              </li>
-                            ))}
-                          </ul>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  );
+                })}
+              </div>
 
-              <button 
-                onClick={() => setIsCategoryOpen(false)}
-                className="mt-12 text-white/20 font-black italic uppercase tracking-[0.2em] text-[10px] pb-10"
-              >
-                 Menüyü Kapat
-              </button>
+              {/* ALT KAPATMA BUTONU */}
+              <div className="py-12 flex justify-center">
+                <button 
+                  onClick={() => setIsCategoryOpen(false)}
+                  className="text-white/20 hover:text-white font-black italic uppercase tracking-[0.3em] text-[10px] transition-all"
+                >
+                   MENÜYÜ KAPAT
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
