@@ -3,6 +3,15 @@ import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
+// Mega Menu datanı buraya da referans olarak alıyoruz ki kategoriler şaşmasın
+const QUICK_CATEGORIES = [
+  { title: "SÜSPANSİYON", slug: "SÜSPANSİYON & YÜRÜYEN" },
+  { title: "FREN", slug: "FREN" },
+  { title: "JANT & SPACER", slug: "JANT VE SPACER" },
+  { title: "AFTERMARKET", slug: "AFTERMARKET PARTS" },
+  { title: "BMW OEM", slug: "BMW OEM PARTS" },
+];
+
 export default function ClientHero() {
   return (
     <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
@@ -31,10 +40,12 @@ export default function ClientHero() {
            OTOMOTİV YEDEK PARÇA & PERFORMANS PARÇALARI
         </motion.p>
         
+        {/* MASAÜSTÜ GÖRÜNÜM: ESKİ LİNK OLDUĞU GİBİ DURUYOR */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 0.8, duration: 0.5 }}
+           className="hidden md:block"
         >
           <Link 
             href="/magaza"
@@ -43,6 +54,34 @@ export default function ClientHero() {
             TÜM MAĞAZAYI İNCELE
           </Link>
         </motion.div>
+
+        {/* MOBİL GÖRÜNÜM: HIZLI KATEGORİ ERİŞİMİ */}
+        <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ delay: 0.8, duration: 0.5 }}
+           className="flex flex-col space-y-3 w-full max-w-[280px] md:hidden"
+        >
+          <p className="text-[#FF5722] text-[10px] font-black italic tracking-[0.3em] mb-2 uppercase">HIZLI REYON SEÇİMİ</p>
+          <div className="grid grid-cols-1 gap-2">
+            {QUICK_CATEGORIES.map((cat) => (
+              <Link 
+                key={cat.title}
+                href={`/magaza?tur=${encodeURIComponent(cat.slug)}`}
+                className="bg-white/5 border border-white/10 py-3 px-4 rounded-xl text-white font-black italic uppercase tracking-widest text-[11px] active:bg-[#FF5722] active:scale-95 transition-all duration-200"
+              >
+                {cat.title}
+              </Link>
+            ))}
+            <Link 
+              href="/magaza"
+              className="text-gray-500 font-black italic uppercase tracking-widest text-[9px] mt-4 hover:text-white transition-colors"
+            >
+              Veya Tüm Ürünlere Bak →
+            </Link>
+          </div>
+        </motion.div>
+
       </motion.div>
     </section>
   );
