@@ -66,9 +66,9 @@ export default function ClientHero() {
         >
           <button 
             onClick={() => setIsCategoryOpen(true)}
-            className="text-[#FF5722] border-2 border-[#FF5722]/50 bg-[#FF5722]/10 py-4 px-10 rounded-full font-black italic uppercase tracking-[0.25em] text-[12px] active:scale-95 transition-all duration-300 shadow-[0_0_30px_rgba(255,87,34,0.3)] animate-pulse"
+            className="text-[#FF5722] border-2 border-[#FF5722]/50 bg-[#FF5722]/10 py-4 px-10 rounded-full font-black italic uppercase tracking-[0.25em] text-[12px] active:scale-95 transition-all duration-300 shadow-[0_0_30px_rgba(255,87,34,0.3)]"
           >
-            KATEGORİ SEÇİMİ 🏎️
+            KATEGORİ SEÇİMİ
           </button>
           
           <Link 
@@ -101,7 +101,7 @@ export default function ClientHero() {
 
             <div className="flex flex-col space-y-4 overflow-y-auto">
               <p className="text-[#FF5722] font-black italic tracking-[0.4em] text-[11px] uppercase mb-6 text-center">
-                REYONUNU SEÇ KANKA
+                PERFORMANS REYONLARI
               </p>
               
               {QUICK_CATEGORIES.map((cat, index) => (
@@ -128,7 +128,7 @@ export default function ClientHero() {
                 onClick={() => setIsCategoryOpen(false)}
                 className="mt-10 text-white/20 font-black italic uppercase tracking-[0.2em] text-[10px]"
               >
-                 Vazgeçtim, geri dön
+                 Menüyü Kapat
               </button>
             </div>
           </motion.div>
