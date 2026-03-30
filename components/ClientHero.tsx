@@ -2,18 +2,60 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { X, ChevronRight } from "lucide-react";
+import { X, ChevronDown, ChevronRight } from "lucide-react";
 
-const QUICK_CATEGORIES = [
-  { title: "SÜSPANSİYON", slug: "SÜSPANSİYON & YÜRÜYEN" },
-  { title: "FREN", slug: "FREN" },
-  { title: "JANT & SPACER", slug: "JANT VE SPACER" },
-  { title: "AFTERMARKET", slug: "AFTERMARKET PARTS" },
-  { title: "BMW OEM", slug: "BMW OEM PARTS" },
+// WEB'DEKİ MEGA MENÜ DATASININ BİREBİR AYNISI
+const MEGA_MENU_DATA = [
+  { 
+    title: "SÜSPANSİYON & YÜRÜYEN", 
+    items: ["Coilover Kiti", "Coilspring Kiti", "Spor Yay Kiti", "SALINCAK & ROT KOLLARI"] 
+  },
+  { 
+    title: "FREN", 
+    items: ["Fren Kitleri", "Fren Balataları", "Fren Hortumları"] 
+  },
+  { 
+    title: "JANT VE SPACER", 
+    items: ["Protrack One", "ST Spacer & Bijon", "Protrack Saplama", "Braid Wheels"] 
+  },
+  { 
+    title: "KULE GERGİLERİ", 
+    items: ["Racing Line Aluminyum", "Çelik Serisi"] 
+  },
+  { 
+    title: "ELEKTRONİK", 
+    items: ["MHD TUNING", "AEM Performance", "Sprint Booster"] 
+  },
+  { 
+    title: "AFTERMARKET PARTS", 
+    items: [
+      "S55 UPGRADE PARTS", 
+      "B58 UPGRADE PARTS", 
+      "HAVA FİLTRESİ KİTLERİ", 
+      "FORGED ENGINE INTERNALS", 
+      "TIAL SPORT", 
+      "SİLİKON HORTUM SETLERİ",
+      "MOTUL PERFORMANCE OILS"
+    ] 
+  },
+  { 
+    title: "BMW OEM PARTS", 
+    items: [
+      "B58 OEM Parts", 
+      "S55 OEM Parts", 
+      "VİTES TOPUZLARI", 
+      "CARBON LIPS & ACCESSORIES"
+    ] 
+  }
 ];
 
 export default function ClientHero() {
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+
+  const toggleAccordion = (title: string) => {
+    setOpenAccordion(openAccordion === title ? null : title);
+  };
 
   return (
     <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
@@ -42,7 +84,7 @@ export default function ClientHero() {
            OTOMOTİV YEDEK PARÇA & PERFORMANS PARÇALARI
         </motion.p>
         
-        {/* DESKTOP GÖRÜNÜM */}
+        {/* DESKTOP GÖRÜNÜM: DEĞİŞMEDİ */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -80,17 +122,17 @@ export default function ClientHero() {
         </motion.div>
       </motion.div>
 
-      {/* MOBİL KATEGORİ PANELİ (POP-UP) */}
+      {/* MOBİL KATEGORİ PANELİ (AKORDEONLU) */}
       <AnimatePresence>
         {isCategoryOpen && (
           <motion.div 
-            initial={{ opacity: 0, scale: 1.1 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.1 }}
-            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-2xl flex flex-col p-10 md:hidden"
+            initial={{ opacity: 0, y: 100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 100 }}
+            className="fixed inset-0 z-[100] bg-black/98 backdrop-blur-2xl flex flex-col p-8 md:hidden"
           >
             {/* KAPATMA BUTONU */}
-            <div className="flex justify-end mb-16">
+            <div className="flex justify-end mb-8">
               <button 
                 onClick={() => setIsCategoryOpen(false)}
                 className="text-white/50 hover:text-[#FF5722] p-2"
@@ -99,34 +141,71 @@ export default function ClientHero() {
               </button>
             </div>
 
-            <div className="flex flex-col space-y-4 overflow-y-auto">
+            {/* AKORDEON LİSTESİ */}
+            <div className="flex flex-col space-y-3 overflow-y-auto pr-2 pb-20">
               <p className="text-[#FF5722] font-black italic tracking-[0.4em] text-[11px] uppercase mb-6 text-center">
                 PERFORMANS REYONLARI
               </p>
               
-              {QUICK_CATEGORIES.map((cat, index) => (
-                <motion.div
-                  key={cat.title}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Link 
-                    href={`/magaza?tur=${encodeURIComponent(cat.slug)}`}
-                    onClick={() => setIsCategoryOpen(false)}
-                    className="group flex items-center justify-between bg-zinc-900/50 border border-white/10 p-6 rounded-3xl active:bg-[#FF5722]/20 active:border-[#FF5722]/50 transition-all duration-300"
+              {MEGA_MENU_DATA.map((cat, index) => {
+                const isOpen = openAccordion === cat.title;
+                return (
+                  <motion.div
+                    key={cat.title}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="bg-zinc-900/50 border border-white/10 rounded-2xl overflow-hidden"
                   >
-                    <span className="text-white font-black italic uppercase tracking-widest text-[13px]">
-                      {cat.title}
-                    </span>
-                    <ChevronRight className="text-[#FF5722]" size={24} />
-                  </Link>
-                </motion.div>
-              ))}
+                    {/* ANA BAŞLIK */}
+                    <button 
+                      onClick={() => toggleAccordion(cat.title)}
+                      className="group flex items-center justify-between w-full p-5 active:bg-[#FF5722]/10 transition-all"
+                    >
+                      <span className="text-white font-black italic uppercase tracking-widest text-[12px] text-left">
+                        {cat.title}
+                      </span>
+                      <ChevronDown 
+                        className={`text-[#FF5722] transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} 
+                        size={20} 
+                      />
+                    </button>
+
+                    {/* ALT KATEGORİLER */}
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="border-t border-white/5 bg-black/40"
+                        >
+                          <ul className="flex flex-col space-y-1 p-4">
+                            {cat.items.map((subItem) => (
+                              <li key={subItem}>
+                                <Link 
+                                  href={`/magaza?tur=${encodeURIComponent(subItem)}`}
+                                  onClick={() => setIsCategoryOpen(false)}
+                                  className="group flex items-center justify-between py-3 px-4 rounded-xl text-gray-400 active:text-white active:bg-white/5 transition-all"
+                                >
+                                  <span className="font-black italic uppercase text-[10px] tracking-[0.1em]">
+                                    {subItem}
+                                  </span>
+                                  <ChevronRight className="text-[#FF5722]" size={14} />
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                );
+              })}
 
               <button 
                 onClick={() => setIsCategoryOpen(false)}
-                className="mt-10 text-white/20 font-black italic uppercase tracking-[0.2em] text-[10px]"
+                className="mt-12 text-white/20 font-black italic uppercase tracking-[0.2em] text-[10px] pb-10"
               >
                  Menüyü Kapat
               </button>
