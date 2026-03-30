@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { X, ChevronRight } from "lucide-react";
 
-// Mega Menu datanı buraya da referans olarak alıyoruz ki kategoriler şaşmasın
 const QUICK_CATEGORIES = [
   { title: "SÜSPANSİYON", slug: "SÜSPANSİYON & YÜRÜYEN" },
   { title: "FREN", slug: "FREN" },
@@ -13,6 +13,8 @@ const QUICK_CATEGORIES = [
 ];
 
 export default function ClientHero() {
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+
   return (
     <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
       <div 
@@ -40,7 +42,7 @@ export default function ClientHero() {
            OTOMOTİV YEDEK PARÇA & PERFORMANS PARÇALARI
         </motion.p>
         
-        {/* MASAÜSTÜ GÖRÜNÜM: ESKİ LİNK OLDUĞU GİBİ DURUYOR */}
+        {/* DESKTOP GÖRÜNÜM */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
@@ -55,34 +57,83 @@ export default function ClientHero() {
           </Link>
         </motion.div>
 
-        {/* MOBİL GÖRÜNÜM: HIZLI KATEGORİ ERİŞİMİ */}
+        {/* MOBİL GÖRÜNÜM: TEK BUTON KATEGORİ SİSTEMİ */}
         <motion.div
            initial={{ opacity: 0, y: 20 }}
            animate={{ opacity: 1, y: 0 }}
            transition={{ delay: 0.8, duration: 0.5 }}
-           className="flex flex-col space-y-3 w-full max-w-[280px] md:hidden"
+           className="flex flex-col items-center w-full md:hidden"
         >
-          <p className="text-[#FF5722] text-[10px] font-black italic tracking-[0.3em] mb-2 uppercase">HIZLI REYON SEÇİMİ</p>
-          <div className="grid grid-cols-1 gap-2">
-            {QUICK_CATEGORIES.map((cat) => (
-              <Link 
-                key={cat.title}
-                href={`/magaza?tur=${encodeURIComponent(cat.slug)}`}
-                className="bg-white/5 border border-white/10 py-3 px-4 rounded-xl text-white font-black italic uppercase tracking-widest text-[11px] active:bg-[#FF5722] active:scale-95 transition-all duration-200"
-              >
-                {cat.title}
-              </Link>
-            ))}
-            <Link 
-              href="/magaza"
-              className="text-gray-500 font-black italic uppercase tracking-widest text-[9px] mt-4 hover:text-white transition-colors"
-            >
-              Veya Tüm Ürünlere Bak →
-            </Link>
-          </div>
+          <button 
+            onClick={() => setIsCategoryOpen(true)}
+            className="text-[#FF5722] border-2 border-[#FF5722]/50 bg-[#FF5722]/10 py-4 px-10 rounded-full font-black italic uppercase tracking-[0.25em] text-[12px] active:scale-95 transition-all duration-300 shadow-[0_0_30px_rgba(255,87,34,0.3)] animate-pulse"
+          >
+            KATEGORİ SEÇİMİ 🏎️
+          </button>
+          
+          <Link 
+            href="/magaza"
+            className="text-white/30 font-black italic uppercase tracking-widest text-[9px] mt-8"
+          >
+            Veya Direkt Mağazaya Git →
+          </Link>
         </motion.div>
-
       </motion.div>
+
+      {/* MOBİL KATEGORİ PANELİ (POP-UP) */}
+      <AnimatePresence>
+        {isCategoryOpen && (
+          <motion.div 
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.1 }}
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-2xl flex flex-col p-10 md:hidden"
+          >
+            {/* KAPATMA BUTONU */}
+            <div className="flex justify-end mb-16">
+              <button 
+                onClick={() => setIsCategoryOpen(false)}
+                className="text-white/50 hover:text-[#FF5722] p-2"
+              >
+                <X size={36} strokeWidth={3} />
+              </button>
+            </div>
+
+            <div className="flex flex-col space-y-4 overflow-y-auto">
+              <p className="text-[#FF5722] font-black italic tracking-[0.4em] text-[11px] uppercase mb-6 text-center">
+                REYONUNU SEÇ KANKA
+              </p>
+              
+              {QUICK_CATEGORIES.map((cat, index) => (
+                <motion.div
+                  key={cat.title}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Link 
+                    href={`/magaza?tur=${encodeURIComponent(cat.slug)}`}
+                    onClick={() => setIsCategoryOpen(false)}
+                    className="group flex items-center justify-between bg-zinc-900/50 border border-white/10 p-6 rounded-3xl active:bg-[#FF5722]/20 active:border-[#FF5722]/50 transition-all duration-300"
+                  >
+                    <span className="text-white font-black italic uppercase tracking-widest text-[13px]">
+                      {cat.title}
+                    </span>
+                    <ChevronRight className="text-[#FF5722]" size={24} />
+                  </Link>
+                </motion.div>
+              ))}
+
+              <button 
+                onClick={() => setIsCategoryOpen(false)}
+                className="mt-10 text-white/20 font-black italic uppercase tracking-[0.2em] text-[10px]"
+              >
+                 Vazgeçtim, geri dön
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
