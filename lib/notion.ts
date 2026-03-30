@@ -28,6 +28,7 @@ function getPropString(prop: any): string {
   return "";
 }
 
+// --- DOSYALARIN HEPSİNİ ÇEKEN KRİTİK FONKSİYON ---
 function getPropFilesArray(prop: any): string[] {
   if (!prop) return [];
   if (prop.type === "files" && prop.files) {
@@ -82,16 +83,12 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
       const props = page.properties;
       const name = getPropString(props['Name']) || getPropString(props['Ad']) || "İsimsiz Ürün";
       
-      // 1. ANA RESİM (Notion 'Image' Dosya Sütunu)
       const mainImage = getPropString(props['Image']) || getPropString(props['Görsel (URL)']) || "/logo.png";
       
-      // 2. GALERİ (Notion 'galleryImages' Metin/Text Sütunu)
-      const galleryText = getPropString(props['galleryImages']);
-      const galleryUrls = galleryText 
-        ? galleryText.split(/[\n,]+/).map(url => url.trim()).filter(url => url.startsWith('http'))
-        : [];
+      // --- BURAYI GÜNCELLEDİM KANKA ---
+      // Artık galleryImages içindeki tüm JPEG/PNG dosyalarını liste olarak alıyor
+      const galleryUrls = getPropFilesArray(props['galleryImages']);
       
-      // Logo ve image_6 gibi dosyaları diziden %100 ayıklıyoruz
       const filteredGallery = galleryUrls.filter(img => 
         img && !img.toLowerCase().includes('logo.png') && !img.toLowerCase().includes('image_6.png')
       );
@@ -119,7 +116,7 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
         price: formattedPrice,
         desc: getPropString(props['Description']) || getPropString(props['Açıklama']),
         image: mainImage,
-        images: filteredGallery, 
+        images: filteredGallery, // Burası artık tek bir string değil, tam bir liste!
         category: cat,
         type: typeStr,
         specs,
