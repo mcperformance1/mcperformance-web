@@ -14,56 +14,46 @@ export default function ProjectGallery({ images }: { images: { url: string; alt:
 
   return (
     <div className="w-full">
-      {/* --- IZGARA AYARI ---
-          'grid' yapısına geçtik. 
-          Mobilde 1, tablette 2, masaüstünde 3 sütun tam 4:3 ralli formatı!
+      {/* 'columns-2 md:columns-3' özelliği sayesinde 
+         fotoğraflar boyutu neyse ona göre dizilir (Pinterest tarzı).
+         'break-inside-avoid' ise fotoğrafların yarım kalmasını engeller.
       */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
         {images.map((image, idx) => (
           <motion.div
             key={idx}
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="group relative cursor-pointer overflow-hidden rounded-2xl border-2 border-zinc-900 bg-zinc-950 transition-all duration-500 hover:border-[#FF5722]/50 shadow-2xl"
+            className="relative break-inside-avoid overflow-hidden rounded-2xl border border-zinc-900 bg-zinc-900 cursor-pointer group"
             onClick={() => setIndex(idx)}
           >
-            {/* --- AKILLI 4:3 ÇERÇEVE --- 
-                aspect-[4/3] ile tüm fotoğrafları aynı hizaya soktuk.
-                'object-cover' sayesinde dikey fotolar çerçeveyi tam doldurur, sağda solda boşluk kalmaz.
+            {/* 'fill' yerine 'w-full h-auto' kullanıyoruz ki 
+               fotoğrafın kendi en-boy oranı bozulmasın.
             */}
-            <div className="relative aspect-[4/3] w-full overflow-hidden">
-              <Image 
-                src={image.url} 
-                alt={image.alt}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
-                sizes="(max-w-768px) 100vw, 33vw"
-              />
-              
-              {/* Hover Efekti: Karartma ve Turuncu Zoom İkonu */}
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center backdrop-blur-[2px]">
-                <div className="bg-[#FF5722] p-4 rounded-full shadow-[0_0_25px_rgba(255,87,34,0.6)] transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
-                  <ZoomIn className="text-white" size={24} strokeWidth={3} />
-                </div>
-              </div>
+            <img 
+              src={image.url} 
+              alt={image.alt}
+              className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-105"
+            />
+            
+            {/* Hover Efekti */}
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+               <div className="bg-[#FF5722] p-3 rounded-full shadow-[0_0_15px_rgba(255,87,34,0.5)]">
+                 <ZoomIn className="text-white" size={20} />
+               </div>
             </div>
           </motion.div>
         ))}
       </div>
 
-      {/* Akıllı Çerçeve (Lightbox) Ayarları */}
       <Lightbox
         index={index}
         open={index >= 0}
         close={() => setIndex(-1)}
         slides={slides}
         plugins={[Zoom]}
-        styles={{ 
-          container: { backgroundColor: "rgba(0, 0, 0, 0.95)" },
-          navigationPrev: { color: "#FF5722" },
-          navigationNext: { color: "#FF5722" },
-        }}
+        styles={{ container: { backgroundColor: "rgba(0, 0, 0, 0.98)" } }}
       />
     </div>
   );

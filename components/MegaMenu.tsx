@@ -37,6 +37,16 @@ export const MEGA_MENU_DATA = [
     ] 
   },
   { 
+    title: "ENGINE UPGRADE PARTS", 
+    items: [
+      "Turbocharger Kits & Upgrades",
+      "Intercoolers & Chargepipes",
+      "Performance Intake Systems",
+      "Engine Hardware & Studs",
+      "Fuel Injectors & Pumps"
+    ] 
+  },
+  { 
     title: "BMW OEM PARTS", 
     items: [
       "B58 OEM Parts", 

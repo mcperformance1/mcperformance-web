@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 import { getItemBySlug } from "../../../lib/notion";
 import ProductSpecs from "../../../components/ProductSpecs";
+import ProjectImageGallery from "../../../components/ProjectImageGallery";
 
 export default async function ProjectDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -22,11 +23,11 @@ export default async function ProjectDetail({ params }: { params: Promise<{ slug
   return (
     <div className="min-h-screen bg-black text-white pt-40 px-6 max-w-screen-xl mx-auto flex flex-col md:flex-row gap-8 lg:gap-16 pb-32">
        
-       <div className="w-full md:w-1/2 aspect-video md:aspect-[4/3] bg-[#0A0A0A] border border-[#222222] relative overflow-hidden rounded-sm">
-          <div 
-             className="w-full h-full bg-cover bg-center transition-transform hover:scale-105 duration-700" 
-             style={{ backgroundImage: `url(${project.image})` }} 
-          />
+       <div className="w-full md:w-1/2">
+         <ProjectImageGallery 
+           mainImage={project.image} 
+           galleryImages={project.images || []} 
+         />
        </div>
 
        <div className="w-full md:w-1/2 flex flex-col justify-center">
