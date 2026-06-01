@@ -1,14 +1,6 @@
 @import "tailwindcss";
 
-@layer base {
-  body {
-    @apply bg-[#000000] text-[#FFFFFF] antialiased;
-    ::selection {
-      @apply bg-[#FFFFFF] text-[#000000];
-    }
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    @apply uppercase font-bold italic tracking-[0.2em] text-shadow-sm;
-  }
+body {
+  background-color: #000000;
+  color: #ffffff;
 }

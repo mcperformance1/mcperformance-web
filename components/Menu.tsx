@@ -25,6 +25,7 @@ export default function Menu({ isOpen, onClose }: MenuProps) {
     { name: "ANA SAYFA", path: "/" },
     { name: "MAĞAZA", path: "/magaza" },
     { name: "PROJELER", path: "/projeler" },
+    { name: "3D BASKI HİZMETİ", path: "/3d-baski-hizmeti" },
     { name: "İLETİŞİM", path: "/iletisim" }
   ];
 
