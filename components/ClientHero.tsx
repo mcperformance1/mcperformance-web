@@ -20,6 +20,10 @@ const MEGA_MENU_DATA = [
     items: ["Protrack One", "ST Spacer & Bijon", "Protrack Saplama", "Braid Wheels"] 
   },
   { 
+    title: "BRAID WHEELS", 
+    items: ["Off Road", "Rally", "Motorsport"] 
+  },
+  { 
     title: "KULE GERGİLERİ", 
     items: ["Racing Line Aluminyum", "Çelik Serisi"] 
   },
@@ -184,7 +188,10 @@ export default function ClientHero() {
                               {cat.items.map((subItem) => (
                                 <Link 
                                   key={subItem}
-                                  href={`/magaza?tur=${encodeURIComponent(subItem)}`}
+                                  href={cat.title === "BRAID WHEELS"
+                                    ? `/magaza?tur=Braid Wheels&tur1=${encodeURIComponent(subItem)}`
+                                    : `/magaza?tur=${encodeURIComponent(subItem)}`
+                                  }
                                   onClick={() => setIsCategoryOpen(false)}
                                   className="flex items-center justify-between py-4 px-6 rounded-2xl group active:bg-[#FF5722]/20 transition-all"
                                 >

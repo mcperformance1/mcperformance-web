@@ -7,7 +7,7 @@ import Link from 'next/link';
 export default function BrandsSlider() {
   const brands = [
     "PROTRACK", "WIECHERS", "STOPTECH", "ST SUSPENSION", "TIAL", 
-    "AEM", "GOODRIDGE", "BMW OEM PARTS", "MINI OEM PARTS", 
+    "AEM", "GOODRIDGE", "BRAID WHEELS", "BMW OEM PARTS", "MINI OEM PARTS", 
     "MOTUL", "FCP", "POWERFLEX", "K&N"
   ];
 

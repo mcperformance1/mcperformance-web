@@ -17,6 +17,10 @@ export const MEGA_MENU_DATA = [
     items: ["Protrack One", "ST Spacer & Bijon", "Protrack Saplama", "Braid Wheels"] 
   },
   { 
+    title: "BRAID WHEELS", 
+    items: ["Off Road", "Rally", "Motorsport"] 
+  },
+  { 
     title: "KULE GERGİLERİ", 
     items: ["Racing Line Aluminyum", "Çelik Serisi"] 
   },
@@ -82,8 +86,8 @@ export default function MegaMenu() {
   const titleClass = "uppercase font-black italic tracking-[0.1em] text-[9px] xl:text-[10px] text-white/70 hover:text-[#FF5722] transition-all duration-300 py-6 cursor-pointer block whitespace-nowrap";
 
   return (
-    // space-x-4 ve xl:space-x-6 ile Header'da yer açtık
-    <div className="hidden lg:flex items-center space-x-4 xl:space-x-6 relative group h-full">
+    // space-x-3 ve xl:space-x-5 ile Header'da yer açtık (9 adet kategori sığacak şekilde daraltıldı)
+    <div className="hidden lg:flex items-center space-x-3 xl:space-x-5 relative group h-full">
       {MEGA_MENU_DATA.map((cat) => (
         <div 
           key={cat.title} 
@@ -91,7 +95,10 @@ export default function MegaMenu() {
           onMouseEnter={() => handleMouseEnter(cat.title)}
           onMouseLeave={handleMouseLeave}
         >
-          <Link href={`/magaza?tur=${encodeURIComponent(cat.title)}`} className={titleClass}>
+          <Link 
+            href={cat.title === "BRAID WHEELS" ? "/magaza?tur=Braid Wheels" : `/magaza?tur=${encodeURIComponent(cat.title)}`} 
+            className={titleClass}
+          >
             {cat.title}
           </Link>
           
@@ -119,11 +126,11 @@ export default function MegaMenu() {
             className="absolute top-[85%] left-1/2 -translate-x-1/2 w-[95vw] max-w-screen-2xl bg-zinc-950/98 backdrop-blur-2xl border border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] z-50 rounded-3xl overflow-hidden"
           >
             <div className="p-10 md:p-12">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-7 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-9 gap-6">
                 {MEGA_MENU_DATA.map((cat) => (
                   <div key={cat.title} className={`flex flex-col space-y-5 transition-all duration-500 ${hoveredCategory === cat.title ? 'opacity-100 scale-105' : 'opacity-30'}`}>
                      <Link 
-                       href={`/magaza?tur=${encodeURIComponent(cat.title)}`}
+                       href={cat.title === "BRAID WHEELS" ? "/magaza?tur=Braid Wheels" : `/magaza?tur=${encodeURIComponent(cat.title)}`}
                        className="text-[#FF5722] font-black italic uppercase tracking-[0.2em] text-[10px] border-b-2 border-[#FF5722]/20 pb-2"
                      >
                         {cat.title}
@@ -132,7 +139,10 @@ export default function MegaMenu() {
                        {cat.items.map(subItem => (
                          <li key={subItem}>
                            <Link 
-                             href={`/magaza?tur=${encodeURIComponent(subItem)}`} 
+                             href={cat.title === "BRAID WHEELS" 
+                               ? `/magaza?tur=Braid Wheels&tur1=${encodeURIComponent(subItem)}` 
+                               : `/magaza?tur=${encodeURIComponent(subItem)}`
+                             }
                              className="text-gray-400 hover:text-white hover:translate-x-2 font-black italic uppercase text-[9px] tracking-[0.1em] transition-all duration-300 block"
                            >
                              {subItem}

@@ -9,6 +9,7 @@ export interface NotionItem {
   images?: string[];
   category: string;
   type: string;
+  type1: string;
   specs: Record<string, string>;
 }
 
@@ -96,7 +97,8 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
       const rawPrice = getPropString(props['Price']) || getPropString(props['Fiyat']);
       const formattedPrice = rawPrice ? (rawPrice.includes("₺") ? rawPrice : `₺${rawPrice}`) : "";
       const cat = getPropString(props['Kategori']).toLowerCase().trim();
-      const typeStr = getPropString(props['Tür 1']) || getPropString(props['Tür1']) || getPropString(props['Tür']) || "";
+      const typeStr = getPropString(props['Tür']) || "";
+      const type1Str = getPropString(props['Tür 1']) || getPropString(props['Tür1']) || "";
       
       const reservedKeys = ["Name", "Ad", "Price", "Fiyat", "Description", "Açıklama", "Image", "Görsel (URL)", "Slug", "Marka", "Status", "Kategori", "Tür", "Tür 1", "Tür1", "Type", "Galeri", "Gallery", "Dosyalar & Medya", "galleryImages"];
       const specs: Record<string, string> = {};
@@ -119,6 +121,7 @@ export async function fetchAllItems(): Promise<NotionItem[]> {
         images: filteredGallery, // Burası artık tek bir string değil, tam bir liste!
         category: cat,
         type: typeStr,
+        type1: type1Str,
         specs,
       };
     });
@@ -155,5 +158,12 @@ export function slugifyBrand(text: string): string {
 
 export async function getProductsByBrandSlug(brandSlug: string) {
   const products = await getAllProducts();
-  return products.filter(p => p.brand && slugifyBrand(p.brand) === brandSlug);
+  return products.filter(p => {
+    if (!p.brand) return false;
+    const cleanBrand = slugifyBrand(p.brand);
+    if (brandSlug === "braid-wheels" || brandSlug === "braid") {
+      return cleanBrand === "braid-wheels" || cleanBrand === "braid";
+    }
+    return cleanBrand === brandSlug;
+  });
 }
