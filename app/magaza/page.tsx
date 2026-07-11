@@ -6,17 +6,15 @@ import { getAllProducts, normalizeType } from "../../lib/notion";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 
-export default async function Magaza({ searchParams }: { searchParams: Promise<{ q?: string; tur?: string; tur1?: string }> }) {
+export default async function Magaza({ searchParams }: { searchParams: Promise<{ q?: string; tur?: string }> }) {
   const params = await searchParams;
   const q = params.q;
   const tur = params.tur ? decodeURIComponent(params.tur) : undefined;
-  const tur1 = params.tur1 ? decodeURIComponent(params.tur1) : undefined;
   
   const products = await getAllProducts();
   
   const query = q?.toLowerCase().trim();
   const rawTur = normalizeType(tur); 
-  const rawTur1 = normalizeType(tur1); 
   
   let displayedProducts = products;
 
@@ -28,7 +26,7 @@ export default async function Magaza({ searchParams }: { searchParams: Promise<{
     );
   }
 
-  // 2. Tür Filtresi (Notion: Tür)
+  // 2. Tür1 Filtresi
   if (rawTur) {
     displayedProducts = displayedProducts.filter(p => {
        const pType = normalizeType(p.type); 
@@ -36,17 +34,7 @@ export default async function Magaza({ searchParams }: { searchParams: Promise<{
     });
   }
 
-  // 3. Tür 1 Filtresi (Notion: Tür 1)
-  if (rawTur1) {
-    displayedProducts = displayedProducts.filter(p => {
-       const pType1 = normalizeType(p.type1); 
-       return pType1 !== "" && (pType1 === rawTur1 || pType1.includes(rawTur1) || rawTur1.includes(pType1));
-    });
-  }
-
-  const pageTitle = tur 
-    ? (tur1 ? `${tur.toUpperCase()} - ${tur1.toUpperCase()}` : `${tur.toUpperCase()}`) 
-    : (tur1 ? `${tur1.toUpperCase()}` : "TÜM ÜRÜNLER");
+  const pageTitle = tur ? `${tur.toUpperCase()}` : "TÜM ÜRÜNLER";
 
   return (
     <div className="min-h-screen bg-black text-white pt-32 px-6 max-w-screen-2xl mx-auto flex flex-col items-center">
