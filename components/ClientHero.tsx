@@ -8,31 +8,38 @@ import { X, ChevronDown, ChevronRight } from "lucide-react";
 // MEGA MENÜ DATASI
 const MEGA_MENU_DATA = [
   { 
-    title: "SÜSPANSİYON & YÜRÜYEN", 
+    title: "SÜSPANSİYON & YÜRÜYEN",
+    query: "süspansiyon&yürüyen",
     items: ["Coilover Kiti", "Coilspring Kiti", "Spor Yay Kiti", "SALINCAK & ROT KOLLARI"] 
   },
   { 
-    title: "FREN", 
+    title: "FREN",
+    query: "Fren",
     items: ["Fren Kitleri", "Fren Balataları", "Fren Hortumları"] 
   },
   { 
-    title: "JANT VE SPACER", 
+    title: "JANT VE SPACER",
+    query: "Jant&Spacer",
     items: ["Protrack One", "ST Spacer & Bijon", "Protrack Saplama", "Braid Wheels"] 
   },
   { 
-    title: "BRAID WHEELS", 
+    title: "BRAID WHEELS",
+    query: "Braid Wheels",
     items: ["Off Road", "Rally", "Motorsport"] 
   },
   { 
-    title: "KULE GERGİLERİ", 
+    title: "KULE GERGİLERİ",
+    query: "Kulegergileri",
     items: ["Racing Line Aluminyum", "Çelik Serisi"] 
   },
   { 
-    title: "ELEKTRONİK", 
+    title: "ELEKTRONİK",
+    query: "Elektronik",
     items: ["MHD TUNING", "AEM Performance", "Sprint Booster"] 
   },
   { 
-    title: "AFTERMARKET PARTS", 
+    title: "AFTERMARKET PARTS",
+    query: "Aftermarket Parts",
     items: [
       "S55 UPGRADE PARTS", 
       "B58 UPGRADE PARTS", 
@@ -44,7 +51,8 @@ const MEGA_MENU_DATA = [
     ] 
   },
   { 
-    title: "BMW OEM PARTS", 
+    title: "BMW OEM PARTS",
+    query: "Bmw Oem Parts",
     items: [
       "B58 OEM Parts", 
       "S55 OEM Parts", 
@@ -185,11 +193,21 @@ export default function ClientHero() {
                             className="bg-black/40 border-t border-white/5"
                           >
                             <div className="flex flex-col p-3">
+                              <Link
+                                href={`/magaza?tur=${encodeURIComponent(cat.query || cat.title)}`}
+                                onClick={() => setIsCategoryOpen(false)}
+                                className="flex items-center justify-between py-3 px-6 rounded-2xl group active:bg-[#FF5722]/20 transition-all mb-1"
+                              >
+                                <span className="text-[#FF5722] font-black italic uppercase text-[11px] tracking-wider">
+                                  TÜM {cat.title}
+                                </span>
+                                <ChevronRight size={14} className="text-[#FF5722]" />
+                              </Link>
                               {cat.items.map((subItem) => (
                                 <Link 
                                   key={subItem}
                                   href={cat.title === "BRAID WHEELS"
-                                    ? `/magaza?tur=Braid Wheels&tur1=${encodeURIComponent(subItem)}`
+                                    ? `/magaza?tur=${encodeURIComponent(cat.query || "Braid Wheels")}&tur1=${encodeURIComponent(subItem)}`
                                     : `/magaza?tur=${encodeURIComponent(subItem)}`
                                   }
                                   onClick={() => setIsCategoryOpen(false)}

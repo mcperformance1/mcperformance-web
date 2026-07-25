@@ -60,6 +60,58 @@ export function normalizeType(text?: string): string {
   return cleanText.replace(/[^a-z0-9]/g, '');
 }
 
+/** Menü etiketleri ↔ Notion Tür / Tür 1 farklarını kapatır */
+function expandTypeAliases(raw: string): string[] {
+  const aliases = new Set<string>([raw]);
+  if (raw === "jantvespacer" || raw === "jantspacer") {
+    aliases.add("jantvespacer");
+    aliases.add("jantspacer");
+  }
+  if (raw === "stspacerbijon" || raw === "stspacerandbijon") {
+    aliases.add("stspacerbijon");
+  }
+  if (raw === "braidwheels" || raw === "braid") {
+    aliases.add("braidwheels");
+    aliases.add("braid");
+    aliases.add("motorsport");
+  }
+  return Array.from(aliases);
+}
+
+function fieldMatchesQuery(field: string, query: string): boolean {
+  if (!field || !query) return false;
+  return field === query || field.includes(query) || query.includes(field);
+}
+
+/** tur / tur1 → Notion Tür + Tür 1 (Braid için Marka da bakılır) */
+export function productMatchesTypeFilters(
+  product: Pick<NotionItem, "type" | "type1" | "brand">,
+  tur?: string,
+  tur1?: string
+): boolean {
+  const rawTur = normalizeType(tur);
+  const rawTur1 = normalizeType(tur1);
+  if (!rawTur && !rawTur1) return true;
+
+  const pType = normalizeType(product.type);
+  const pType1 = normalizeType(product.type1);
+  const pBrand = normalizeType(product.brand);
+  const typeFields = [pType, pType1].filter(Boolean);
+
+  const matchesQueries = (queries: string[]) =>
+    queries.some((q) => {
+      if (typeFields.some((field) => fieldMatchesQuery(field, q))) return true;
+      // Sadece Braid menü/marka eşleşmesi
+      if ((q === "braidwheels" || q === "braid") && pBrand.includes("braid")) return true;
+      return false;
+    });
+
+  if (rawTur && !matchesQueries(expandTypeAliases(rawTur))) return false;
+  if (rawTur1 && !matchesQueries(expandTypeAliases(rawTur1))) return false;
+
+  return true;
+}
+
 export async function fetchAllItems(): Promise<NotionItem[]> {
   const databaseId = process.env.NOTION_DATABASE_ID;
   const secret = process.env.NOTION_SECRET;

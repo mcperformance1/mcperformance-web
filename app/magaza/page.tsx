@@ -2,19 +2,19 @@ import React from "react";
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 import ProductCard from "../../components/ProductCard";
-import { getAllProducts, normalizeType } from "../../lib/notion";
+import { getAllProducts, productMatchesTypeFilters } from "../../lib/notion";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
 
-export default async function Magaza({ searchParams }: { searchParams: Promise<{ q?: string; tur?: string }> }) {
+export default async function Magaza({ searchParams }: { searchParams: Promise<{ q?: string; tur?: string; tur1?: string }> }) {
   const params = await searchParams;
   const q = params.q;
   const tur = params.tur ? decodeURIComponent(params.tur) : undefined;
+  const tur1 = params.tur1 ? decodeURIComponent(params.tur1) : undefined;
   
   const products = await getAllProducts();
   
   const query = q?.toLowerCase().trim();
-  const rawTur = normalizeType(tur); 
   
   let displayedProducts = products;
 
@@ -26,15 +26,14 @@ export default async function Magaza({ searchParams }: { searchParams: Promise<{
     );
   }
 
-  // 2. Tür1 Filtresi
-  if (rawTur) {
-    displayedProducts = displayedProducts.filter(p => {
-       const pType = normalizeType(p.type); 
-       return pType !== "" && (pType === rawTur || pType.includes(rawTur) || rawTur.includes(pType));
-    });
+  // 2. Tür / Tür 1 filtresi (menü etiketleri + Notion alanları)
+  if (tur || tur1) {
+    displayedProducts = displayedProducts.filter(p =>
+      productMatchesTypeFilters(p, tur, tur1)
+    );
   }
 
-  const pageTitle = tur ? `${tur.toUpperCase()}` : "TÜM ÜRÜNLER";
+  const pageTitle = tur1 ? `${tur1.toUpperCase()}` : tur ? `${tur.toUpperCase()}` : "TÜM ÜRÜNLER";
 
   return (
     <div className="min-h-screen bg-black text-white pt-32 px-6 max-w-screen-2xl mx-auto flex flex-col items-center">

@@ -5,31 +5,38 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export const MEGA_MENU_DATA = [
   { 
-    title: "SÜSPANSİYON & YÜRÜYEN", 
+    title: "SÜSPANSİYON & YÜRÜYEN",
+    query: "süspansiyon&yürüyen",
     items: ["Coilover Kiti", "Coilspring Kiti", "Spor Yay Kiti", "SALINCAK & ROT KOLLARI"] 
   },
   { 
-    title: "FREN", 
+    title: "FREN",
+    query: "Fren",
     items: ["Fren Kitleri", "Fren Balataları", "Fren Hortumları"] 
   },
   { 
-    title: "JANT VE SPACER", 
+    title: "JANT VE SPACER",
+    query: "Jant&Spacer",
     items: ["Protrack One", "ST Spacer & Bijon", "Protrack Saplama", "Braid Wheels"] 
   },
   { 
-    title: "BRAID WHEELS", 
+    title: "BRAID WHEELS",
+    query: "Braid Wheels",
     items: ["Off Road", "Rally", "Motorsport"] 
   },
   { 
-    title: "KULE GERGİLERİ", 
+    title: "KULE GERGİLERİ",
+    query: "Kulegergileri",
     items: ["Racing Line Aluminyum", "Çelik Serisi"] 
   },
   { 
-    title: "ELEKTRONİK", 
+    title: "ELEKTRONİK",
+    query: "Elektronik",
     items: ["MHD TUNING", "AEM Performance", "Sprint Booster"] 
   },
   { 
-    title: "AFTERMARKET PARTS", 
+    title: "AFTERMARKET PARTS",
+    query: "Aftermarket Parts",
     items: [
       "S55 UPGRADE PARTS", 
       "B58 UPGRADE PARTS", 
@@ -41,7 +48,8 @@ export const MEGA_MENU_DATA = [
     ] 
   },
   { 
-    title: "ENGINE UPGRADE PARTS", 
+    title: "ENGINE UPGRADE PARTS",
+    query: "Aftermarket Parts",
     items: [
       "Turbocharger Kits & Upgrades",
       "Intercoolers & Chargepipes",
@@ -51,7 +59,8 @@ export const MEGA_MENU_DATA = [
     ] 
   },
   { 
-    title: "BMW OEM PARTS", 
+    title: "BMW OEM PARTS",
+    query: "Bmw Oem Parts",
     items: [
       "B58 OEM Parts", 
       "S55 OEM Parts", 
@@ -60,6 +69,20 @@ export const MEGA_MENU_DATA = [
     ] 
   }
 ];
+
+function categoryHref(cat: { title: string; query?: string }) {
+  const tur = cat.query || cat.title;
+  return `/magaza?tur=${encodeURIComponent(tur)}`;
+}
+
+function subItemHref(cat: { title: string; query?: string }, subItem: string) {
+  // Braid alt başlıkları Tür 1'de (Off Road / Rally / Motorsport)
+  if (cat.title === "BRAID WHEELS") {
+    return `/magaza?tur=${encodeURIComponent(cat.query || "Braid Wheels")}&tur1=${encodeURIComponent(subItem)}`;
+  }
+  // Diğer alt kategoriler Notion "Tür 1" alanında
+  return `/magaza?tur=${encodeURIComponent(subItem)}`;
+}
 
 export default function MegaMenu() {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
@@ -96,7 +119,7 @@ export default function MegaMenu() {
           onMouseLeave={handleMouseLeave}
         >
           <Link 
-            href={cat.title === "BRAID WHEELS" ? "/magaza?tur=Braid Wheels" : `/magaza?tur=${encodeURIComponent(cat.title)}`} 
+            href={categoryHref(cat)} 
             className={titleClass}
           >
             {cat.title}
@@ -122,7 +145,7 @@ export default function MegaMenu() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 15 }}
-            transition={{ duration: 0.2, ease: "circOut" }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
             className="absolute top-[85%] left-1/2 -translate-x-1/2 w-[95vw] max-w-screen-2xl bg-zinc-950/98 backdrop-blur-2xl border border-white/10 shadow-[0_40px_80px_rgba(0,0,0,0.9)] z-50 rounded-3xl overflow-hidden"
           >
             <div className="p-10 md:p-12">
@@ -130,7 +153,7 @@ export default function MegaMenu() {
                 {MEGA_MENU_DATA.map((cat) => (
                   <div key={cat.title} className={`flex flex-col space-y-5 transition-all duration-500 ${hoveredCategory === cat.title ? 'opacity-100 scale-105' : 'opacity-30'}`}>
                      <Link 
-                       href={cat.title === "BRAID WHEELS" ? "/magaza?tur=Braid Wheels" : `/magaza?tur=${encodeURIComponent(cat.title)}`}
+                       href={categoryHref(cat)}
                        className="text-[#FF5722] font-black italic uppercase tracking-[0.2em] text-[10px] border-b-2 border-[#FF5722]/20 pb-2"
                      >
                         {cat.title}
@@ -139,10 +162,7 @@ export default function MegaMenu() {
                        {cat.items.map(subItem => (
                          <li key={subItem}>
                            <Link 
-                             href={cat.title === "BRAID WHEELS" 
-                               ? `/magaza?tur=Braid Wheels&tur1=${encodeURIComponent(subItem)}` 
-                               : `/magaza?tur=${encodeURIComponent(subItem)}`
-                             }
+                             href={subItemHref(cat, subItem)}
                              className="text-gray-400 hover:text-white hover:translate-x-2 font-black italic uppercase text-[9px] tracking-[0.1em] transition-all duration-300 block"
                            >
                              {subItem}

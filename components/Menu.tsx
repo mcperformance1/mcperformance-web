@@ -116,7 +116,7 @@ export default function Menu({ isOpen, onClose }: MenuProps) {
                           >
                             <div className="flex flex-col space-y-3 py-4 pl-4 border-l-2 border-[#1A1A1A] ml-2">
                                <Link 
-                                  href={cat.title === "BRAID WHEELS" ? "/magaza?tur=Braid Wheels" : `/magaza?tur=${encodeURIComponent(cat.title)}`}
+                                  href={`/magaza?tur=${encodeURIComponent((cat as { query?: string }).query || cat.title)}`}
                                   onClick={onClose}
                                   className="text-[#FF5722] font-bold italic text-sm tracking-wider mb-2"
                                >
@@ -126,7 +126,7 @@ export default function Menu({ isOpen, onClose }: MenuProps) {
                                  <Link 
                                     key={subItem}
                                     href={cat.title === "BRAID WHEELS" 
-                                      ? `/magaza?tur=Braid Wheels&tur1=${encodeURIComponent(subItem)}` 
+                                      ? `/magaza?tur=${encodeURIComponent((cat as { query?: string }).query || "Braid Wheels")}&tur1=${encodeURIComponent(subItem)}` 
                                       : `/magaza?tur=${encodeURIComponent(subItem)}`
                                     }
                                     onClick={onClose}
